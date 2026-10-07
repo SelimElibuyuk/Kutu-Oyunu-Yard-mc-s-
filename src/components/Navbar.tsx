@@ -64,6 +64,14 @@ export const Navbar: React.FC = () => {
               <Gamepad2 className="w-4 h-4" />
               <span>Oyunlar</span>
             </Link>
+
+            <Link
+              href="/admin"
+              className="pixel-btn bg-amber-200 hover:bg-amber-300 text-slate-900 px-3 py-1.5 text-xs flex items-center gap-1.5 font-bold"
+              title="Yönetici Paneli"
+            >
+              <span>Yönetici</span>
+            </Link>
           </div>
         </div>
       </header>

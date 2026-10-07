@@ -32,11 +32,23 @@ export const GAME_ICONS: Record<string, string> = {
 };
 
 export default function HomePage() {
+  const [gamesMap, setGamesMap] = useState<Record<string, GameData>>(GAMES_DATA);
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedDifficulty, setSelectedDifficulty] = useState<string>('Tümü');
   const [activeQrGame, setActiveQrGame] = useState<{ id: string; title: string } | null>(null);
 
-  const gamesList: GameData[] = Object.values(GAMES_DATA);
+  React.useEffect(() => {
+    fetch('/api/games')
+      .then((res) => res.json())
+      .then((data) => {
+        if (data && typeof data === 'object') {
+          setGamesMap(data);
+        }
+      })
+      .catch((err) => console.error(err));
+  }, []);
+
+  const gamesList: GameData[] = Object.values(gamesMap);
 
   const filteredGames = gamesList.filter((game) => {
     const matchesSearch =

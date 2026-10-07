@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { GAMES_DATA } from '@/data/games';
+import { getStoredGames } from '@/data/storage';
+import { GameData, SetupStep, TurnPhase } from '@/data/games';
 import { GoogleGenAI } from '@google/genai';
 
 export async function POST(req: NextRequest) {
@@ -7,7 +8,8 @@ export async function POST(req: NextRequest) {
     const body = await req.json();
     const { gameId, messages, userApiKey } = body;
 
-    const game = GAMES_DATA[gameId];
+    const allGames = getStoredGames();
+    const game = allGames[gameId];
     if (!game) {
       return NextResponse.json({ error: 'Oyun bulunamadı' }, { status: 404 });
     }
@@ -76,14 +78,14 @@ YÖNERGELERİN:
   }
 }
 
-function generateRuleEngineResponse(game: typeof GAMES_DATA[string], query: string): string {
+function generateRuleEngineResponse(game: GameData, query: string): string {
   const q = query.toLowerCase().trim();
 
   // Check exact/close FAQ matches
   for (const faq of game.faqs) {
     const faqQ = faq.question.toLowerCase();
-    const words = faqQ.split(' ').filter(w => w.length > 3);
-    const matchCount = words.filter(w => q.includes(w)).length;
+    const words = faqQ.split(' ').filter((w: string) => w.length > 3);
+    const matchCount = words.filter((w: string) => q.includes(w)).length;
     
     if (matchCount >= 2 || q.includes(faqQ) || faqQ.includes(q)) {
       return `🎲 **Hakem Kararı (${faq.pageRef || 'Kural Kitapçığı'}):**\n\n${faq.answer}\n\n*Masada iyi eğlenceler! Başka bir kural anlaşmazlığı olursa sormaktan çekinmeyin.*`;
@@ -93,7 +95,7 @@ function generateRuleEngineResponse(game: typeof GAMES_DATA[string], query: stri
   // Setup / Kurulum queries
   if (q.includes('kurulum') || q.includes('nasıl kurulur') || q.includes('başla') || q.includes('hazır')) {
     let res = `📋 **${game.title} Hızlı Kurulum Adımları:**\n\n`;
-    game.setupSteps.forEach((step, idx) => {
+    game.setupSteps.forEach((step: SetupStep, idx: number) => {
       res += `**${idx + 1}. ${step.title}:** ${step.description}\n`;
       if (step.tip) res += `💡 *İpucu: ${step.tip}*\n`;
       res += '\n';
@@ -104,7 +106,7 @@ function generateRuleEngineResponse(game: typeof GAMES_DATA[string], query: stri
   // Turn flow / Sıra bendeyken ne yaparım
   if (q.includes('sıra') || q.includes('tur') || q.includes('hamle') || q.includes('ne yapabilirim') || q.includes('aşama')) {
     let res = `⏱️ **${game.title} Tur Akışı (Sıra Sizdeyken):**\n\n`;
-    game.turnPhases.forEach(tp => {
+    game.turnPhases.forEach((tp: TurnPhase) => {
       res += `🔹 **${tp.phase}**\n${tp.description}\n\n`;
     });
     return res;

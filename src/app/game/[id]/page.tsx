@@ -1,4 +1,4 @@
-import { GAMES_DATA } from '@/data/games';
+import { getStoredGames } from '@/data/storage';
 import { notFound } from 'next/navigation';
 import { GameClient } from '@/components/GameClient';
 
@@ -7,12 +7,14 @@ interface GamePageProps {
 }
 
 export function generateStaticParams() {
-  return Object.keys(GAMES_DATA).map((id) => ({ id }));
+  const games = getStoredGames();
+  return Object.keys(games).map((id) => ({ id }));
 }
 
 export default async function GamePage({ params }: GamePageProps) {
   const resolvedParams = await params;
-  const game = GAMES_DATA[resolvedParams.id];
+  const games = getStoredGames();
+  const game = games[resolvedParams.id];
 
   if (!game) {
     notFound();

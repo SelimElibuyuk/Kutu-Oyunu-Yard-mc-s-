@@ -1,4 +1,4 @@
-import { GAMES_DATA } from '@/data/games';
+import { getStoredGames } from '@/data/storage';
 import { notFound } from 'next/navigation';
 import { PrintClient } from '@/components/PrintClient';
 
@@ -7,12 +7,14 @@ interface PrintPageProps {
 }
 
 export function generateStaticParams() {
-  return Object.keys(GAMES_DATA).map((id) => ({ id }));
+  const games = getStoredGames();
+  return Object.keys(games).map((id) => ({ id }));
 }
 
 export default async function PrintPage({ params }: PrintPageProps) {
   const resolvedParams = await params;
-  const game = GAMES_DATA[resolvedParams.id];
+  const games = getStoredGames();
+  const game = games[resolvedParams.id];
 
   if (!game) {
     notFound();
