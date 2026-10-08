@@ -2,20 +2,48 @@
 @import "tailwindcss";
 
 :root {
-  --background: #f0fdf4;
-  --foreground: #0f172a;
+  --bg-color: #f0fdf4;
+  --bg-dot-1: #bae6fd;
+  --bg-dot-2: #bbf7d0;
+  --surface: #ffffff;
+  --surface-alt: #f8fafc;
+  --text-main: #0f172a;
+  --text-muted: #475569;
+  --border-color: #0f172a;
+  --shadow-color: #0f172a;
+  --card-bg: #ffffff;
+  --input-bg: #ffffff;
+  --chip-bg: #e0f2fe;
+}
+
+.dark {
+  --bg-color: #090d16;
+  --bg-dot-1: #1e293b;
+  --bg-dot-2: #0f2334;
+  --surface: #111827;
+  --surface-alt: #1e293b;
+  --text-main: #f8fafc;
+  --text-muted: #94a3b8;
+  --border-color: #38bdf8;
+  --shadow-color: #020617;
+  --card-bg: #111827;
+  --input-bg: #1e293b;
+  --chip-bg: #0f2334;
 }
 
 body {
-  background-color: #f0fdf4;
+  background-color: var(--bg-color);
   background-image: 
-    radial-gradient(#bae6fd 1.5px, transparent 1.5px),
-    radial-gradient(#bbf7d0 1.5px, #f0fdf4 1.5px);
+    radial-gradient(var(--bg-dot-1) 1.5px, transparent 1.5px),
+    radial-gradient(var(--bg-dot-2) 1.5px, var(--bg-color) 1.5px);
   background-size: 32px 32px;
   background-position: 0 0, 16px 16px;
-  color: #0f172a;
+  color: var(--text-main);
   font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
   letter-spacing: -0.01em;
+  max-width: 100%;
+  overflow-x: hidden;
+  transition: background-color 0.25s ease, color 0.25s ease;
 }
 
 /* Crisp Turkish-safe display typography */
@@ -26,49 +54,59 @@ body {
 
 /* Retro Pixel Neo-Brutalist Box Shadows */
 .pixel-box {
-  background-color: #ffffff;
-  border: 3px solid #0f172a;
-  box-shadow: 4px 4px 0px 0px #0f172a;
+  background-color: var(--card-bg);
+  border: 3px solid var(--border-color);
+  box-shadow: 4px 4px 0px 0px var(--shadow-color);
   border-radius: 16px;
+  transition: background-color 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
 }
 
 .pixel-box-sm {
-  background-color: #ffffff;
-  border: 2px solid #0f172a;
-  box-shadow: 3px 3px 0px 0px #0f172a;
+  background-color: var(--card-bg);
+  border: 2.5px solid var(--border-color);
+  box-shadow: 3px 3px 0px 0px var(--shadow-color);
   border-radius: 12px;
 }
 
 .pixel-box-card {
-  background-color: #ffffff;
-  border: 3px solid #0f172a;
-  box-shadow: 5px 5px 0px 0px #0f172a;
+  background-color: var(--card-bg);
+  border: 3px solid var(--border-color);
+  box-shadow: 4px 4px 0px 0px var(--shadow-color);
   border-radius: 18px;
-  transition: transform 0.12s ease, box-shadow 0.12s ease;
+  transition: transform 0.15s ease, box-shadow 0.15s ease, background-color 0.2s ease;
 }
 
-.pixel-box-card:hover {
-  transform: translate(-2px, -2px);
-  box-shadow: 7px 7px 0px 0px #0f172a;
+@media (min-width: 640px) {
+  .pixel-box-card {
+    box-shadow: 5px 5px 0px 0px var(--shadow-color);
+  }
+  .pixel-box-card:hover {
+    transform: translate(-2px, -2px);
+    box-shadow: 7px 7px 0px 0px var(--shadow-color);
+  }
 }
 
-/* Tactile Retro Buttons */
+/* Tactile Retro Buttons (WCAG 44x44px minimum touch target compatible) */
 .pixel-btn {
-  border: 2.5px solid #0f172a;
-  box-shadow: 3px 3px 0px 0px #0f172a;
+  border: 2.5px solid var(--border-color);
+  box-shadow: 3px 3px 0px 0px var(--shadow-color);
   border-radius: 12px;
   font-weight: 800;
   transition: all 0.1s ease;
   user-select: none;
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .pixel-btn:hover {
-  filter: brightness(1.04);
+  filter: brightness(1.06);
 }
 
 .pixel-btn:active {
   transform: translate(2px, 2px);
-  box-shadow: 1px 1px 0px 0px #0f172a;
+  box-shadow: 1px 1px 0px 0px var(--shadow-color);
 }
 
 .pixel-btn-primary {
@@ -82,8 +120,13 @@ body {
 }
 
 .pixel-btn-secondary {
-  background-color: #ffffff;
-  color: #0f172a;
+  background-color: var(--surface);
+  color: var(--text-main);
+}
+
+/* Touch chip minimum height */
+.touch-chip {
+  min-height: 44px;
 }
 
 /* Hide scrollbar */

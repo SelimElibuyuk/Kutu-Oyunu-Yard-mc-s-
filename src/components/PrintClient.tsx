@@ -25,13 +25,13 @@ export const PrintClient: React.FC<PrintClientProps> = ({ game }) => {
       <div className="w-full max-w-2xl mb-6 flex items-center justify-between print:hidden">
         <Link
           href={`/game/${game.id}`}
-          className="pixel-btn bg-white px-3 py-2 text-xs font-bold inline-flex items-center gap-1.5"
+          className="pixel-btn bg-white px-3 py-2 text-xs font-bold inline-flex items-center gap-1.5 min-h-[44px]"
         >
           <ArrowLeft className="w-4 h-4" /> Asistan Ekranına Dön
         </Link>
         <button
           onClick={() => window.print()}
-          className="pixel-btn pixel-btn-accent px-4 py-2 text-xs font-bold flex items-center gap-2"
+          className="pixel-btn pixel-btn-accent px-4 py-2 text-xs font-bold flex items-center gap-2 min-h-[44px]"
         >
           <Printer className="w-4 h-4" /> Masa Kartını Yazdır (Print)
         </button>

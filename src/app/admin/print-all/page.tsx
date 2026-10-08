@@ -22,7 +22,7 @@ export default function PrintAllPage() {
           setGames(Object.values(data));
         }
       })
-      .catch((err) => console.error(err));
+      .catch(() => {});
   }, []);
 
   return (
@@ -31,14 +31,14 @@ export default function PrintAllPage() {
       <div className="max-w-4xl mx-auto mb-6 flex items-center justify-between print:hidden">
         <Link
           href="/admin"
-          className="pixel-btn bg-white px-3 py-2 text-xs font-bold inline-flex items-center gap-1.5"
+          className="pixel-btn bg-white px-3 py-2 min-h-[44px] text-xs font-bold inline-flex items-center gap-1.5"
         >
           <ArrowLeft className="w-4 h-4" /> Yönetici Paneline Dön
         </Link>
 
         <button
           onClick={() => window.print()}
-          className="pixel-btn pixel-btn-accent px-5 py-2 text-xs font-extrabold flex items-center gap-2 shadow-lg"
+          className="pixel-btn pixel-btn-accent px-5 py-2 min-h-[44px] text-xs font-extrabold flex items-center gap-2 shadow-lg"
         >
           <Printer className="w-4 h-4 stroke-[2.5]" /> Tüm Masa Kartlarını Yazdır (A4)
         </button>

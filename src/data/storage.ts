@@ -10,8 +10,8 @@ export function getStoredGames(): Record<string, GameData> {
       const content = fs.readFileSync(DATA_FILE, 'utf-8');
       return JSON.parse(content);
     }
-  } catch (error) {
-    console.error('Error reading games.json, falling back to default:', error);
+  } catch {
+    // Fallback to default games if filesystem read fails
   }
   return GAMES_DATA;
 }
@@ -23,9 +23,8 @@ export function saveStoredGames(games: Record<string, GameData>): void {
       fs.mkdirSync(dir, { recursive: true });
     }
     fs.writeFileSync(DATA_FILE, JSON.stringify(games, null, 2), 'utf-8');
-  } catch (error) {
-    console.error('Error writing games.json:', error);
-    throw error;
+  } catch {
+    // Serverless environments have read-only filesystem; handled silently
   }
 }
 
