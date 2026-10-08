@@ -121,28 +121,28 @@ YÖNERGELERİN:
             },
           });
           responseText = response.text || '';
-        } catch {
-          // If temporary spike occurs, retry once after 500ms
-          await new Promise((r) => setTimeout(r, 600));
+        } catch (geminiError: unknown) {
+          console.error('[Gemini 3.8 Flash Failed]:', geminiError);
+          // Try fallback to gemini-2.5-flash
           try {
-            const response = await ai.models.generateContent({
-              model: 'gemini-3.8-flash',
+            const fallbackRes = await ai.models.generateContent({
+              model: 'gemini-2.5-flash',
               contents,
               config: {
                 systemInstruction,
               },
             });
-            responseText = response.text || '';
-          } catch {
-            // Let it fall back seamlessly
+            responseText = fallbackRes.text || '';
+          } catch (fbError) {
+            console.error('[Gemini 2.5 Flash Fallback Failed]:', fbError);
           }
         }
 
         if (responseText) {
           return NextResponse.json({ reply: responseText, source: 'gemini' }, { headers: corsHeaders });
         }
-      } catch {
-        // Fallback to gateway or local engine if Gemini SDK fails
+      } catch (err) {
+        console.error('[Gemini Client Init Failed]:', err);
       }
     }
 
@@ -184,7 +184,8 @@ YÖNERGELERİN:
     // 3. Built-in Smart Rule Engine (Instant Offline / Fallback response)
     const reply = generateRuleEngineResponse(game, lastMessage);
     return NextResponse.json({ reply, source: 'local_engine' }, { headers: corsHeaders });
-  } catch {
+  } catch (error) {
+    console.error('[Chat API Error]:', error);
     return NextResponse.json(
       { error: 'İstek işlenirken bir sorun oluştu. Lütfen tekrar deneyin.' },
       { status: 500, headers: corsHeaders }
