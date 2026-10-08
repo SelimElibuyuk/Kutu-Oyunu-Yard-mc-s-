@@ -82,10 +82,12 @@ export async function POST(req: NextRequest) {
 
     // ACTION: TEST API KEY
     if (body.action === 'test_key') {
-      const activeKey = config.geminiApiKey || process.env.GEMINI_API_KEY;
+      const activeKey = (body.apiKey && typeof body.apiKey === 'string' && body.apiKey.trim())
+        ? body.apiKey.trim()
+        : config.geminiApiKey || process.env.GEMINI_API_KEY;
       if (!activeKey) {
         return NextResponse.json(
-          { error: 'Kayıtlı bir API anahtarı bulunamadı.' },
+          { error: 'Kayıtlı veya gönderilmiş bir API anahtarı bulunamadı.' },
           { status: 400, headers: corsHeaders }
         );
       }

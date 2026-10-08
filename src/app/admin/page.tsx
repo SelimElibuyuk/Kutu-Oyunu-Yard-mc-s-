@@ -137,10 +137,14 @@ export default function AdminPage() {
     setIsTestingKey(true);
     setKeyTestMessage(null);
     try {
+      const payload: { action: string; apiKey?: string } = { action: 'test_key' };
+      if (newKeyInput.trim()) {
+        payload.apiKey = newKeyInput.trim();
+      }
       const res = await fetch('/api/admin/config', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ action: 'test_key' }),
+        body: JSON.stringify(payload),
       });
       const data = await res.json();
       if (res.ok && data.success) {
