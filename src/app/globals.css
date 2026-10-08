@@ -16,21 +16,6 @@
   --chip-bg: #e0f2fe;
 }
 
-.dark {
-  --bg-color: #090d16;
-  --bg-dot-1: #1e293b;
-  --bg-dot-2: #0f2334;
-  --surface: #111827;
-  --surface-alt: #1e293b;
-  --text-main: #f8fafc;
-  --text-muted: #94a3b8;
-  --border-color: #38bdf8;
-  --shadow-color: #020617;
-  --card-bg: #111827;
-  --input-bg: #1e293b;
-  --chip-bg: #0f2334;
-}
-
 body {
   background-color: var(--bg-color);
   background-image: 
@@ -43,7 +28,6 @@ body {
   letter-spacing: -0.01em;
   max-width: 100%;
   overflow-x: hidden;
-  transition: background-color 0.25s ease, color 0.25s ease;
 }
 
 /* Crisp Turkish-safe display typography */
@@ -58,7 +42,7 @@ body {
   border: 3px solid var(--border-color);
   box-shadow: 4px 4px 0px 0px var(--shadow-color);
   border-radius: 16px;
-  transition: background-color 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
 }
 
 .pixel-box-sm {
@@ -73,7 +57,7 @@ body {
   border: 3px solid var(--border-color);
   box-shadow: 4px 4px 0px 0px var(--shadow-color);
   border-radius: 18px;
-  transition: transform 0.15s ease, box-shadow 0.15s ease, background-color 0.2s ease;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
 }
 
 @media (min-width: 640px) {

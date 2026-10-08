@@ -9,20 +9,20 @@ import {
   Trash2,
   Edit3,
   Printer,
-  ExternalLink,
   Shield,
   Lock,
   Unlock,
   Check,
   X,
   Sparkles,
-  Dices,
   Users,
   Clock,
   Layers,
   HelpCircle,
   RotateCcw,
-  BookOpen
+  BookOpen,
+  Key,
+  ExternalLink,
 } from 'lucide-react';
 
 export default function AdminPage() {
@@ -32,6 +32,23 @@ export default function AdminPage() {
 
   const [games, setGames] = useState<Record<string, GameData>>({});
   const [isLoading, setIsLoading] = useState(true);
+
+  // Gemini API Key management state
+  const [apiKeyStatus, setApiKeyStatus] = useState<{
+    hasKey: boolean;
+    maskedKey: string;
+    source: string;
+  }>({ hasKey: false, maskedKey: '', source: 'none' });
+  const [newKeyInput, setNewKeyInput] = useState('');
+  const [isSavingKey, setIsSavingKey] = useState(false);
+  const [keyMessage, setKeyMessage] = useState('');
+
+  // Admin PIN change state
+  const [currentPinChangeInput, setCurrentPinChangeInput] = useState('');
+  const [newPinInput, setNewPinInput] = useState('');
+  const [confirmPinInput, setConfirmPinInput] = useState('');
+  const [isChangingPin, setIsChangingPin] = useState(false);
+  const [pinChangeMessage, setPinChangeMessage] = useState<{ text: string; isError: boolean } | null>(null);
 
   // Modal State for Edit / Add
   const [editingGame, setEditingGame] = useState<GameData | null>(null);
@@ -43,29 +60,161 @@ export default function AdminPage() {
   const [formTab, setFormTab] = useState<'basic' | 'rules' | 'setup' | 'turn' | 'faq'>('basic');
 
   useEffect(() => {
-    // Check if session is already active
     const auth = sessionStorage.getItem('boardgame_admin_auth');
     if (auth === 'true') {
       setIsAuthenticated(true);
       fetchGames();
+      fetchApiKeyConfig();
     }
   }, []);
 
-  const handleLogin = (e: React.FormEvent) => {
+  const fetchApiKeyConfig = async () => {
+    try {
+      const res = await fetch('/api/admin/config');
+      if (res.ok) {
+        const data = await res.json();
+        setApiKeyStatus(data);
+      }
+    } catch {}
+  };
+
+  const handleSaveApiKey = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (!newKeyInput.trim()) return;
+
+    setIsSavingKey(true);
+    setKeyMessage('');
+
+    try {
+      const activePin = sessionStorage.getItem('boardgame_admin_active_pin') || '1234';
+      const res = await fetch('/api/admin/config', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ pin: activePin, apiKey: newKeyInput.trim() }),
+      });
+
+      const data = await res.json();
+      if (res.ok) {
+        setApiKeyStatus({
+          hasKey: true,
+          maskedKey: data.maskedKey,
+          source: 'admin_saved',
+        });
+        setNewKeyInput('');
+        setKeyMessage('✅ API Anahtarı sunucuya güvenle kaydedildi!');
+        setTimeout(() => setKeyMessage(''), 3000);
+      } else {
+        setKeyMessage(`❌ Hata: ${data.error || 'Kaydedilemedi'}`);
+      }
+    } catch {
+      setKeyMessage('❌ Sunucu bağlantı hatası.');
+    } finally {
+      setIsSavingKey(false);
+    }
+  };
+
+  const handleDeleteApiKey = async () => {
+    if (!confirm('Gemini API anahtarını sunucudan kaldırmak istediğinize emin misiniz? Sistem dahili kural motoruyla çalışmaya devam edecektir.')) return;
+
+    try {
+      const activePin = sessionStorage.getItem('boardgame_admin_active_pin') || '1234';
+      const res = await fetch(`/api/admin/config?pin=${encodeURIComponent(activePin)}`, {
+        method: 'DELETE',
+      });
+      if (res.ok) {
+        setApiKeyStatus({ hasKey: false, maskedKey: '', source: 'none' });
+        setKeyMessage('🗑️ API Anahtarı silindi. Dahili motor devrede.');
+        setTimeout(() => setKeyMessage(''), 3000);
+      }
+    } catch {}
+  };
+
+  const handleLogin = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setPinError(false);
+    const cleanedPin = pinInput.trim();
+
+    try {
+      const res = await fetch('/api/admin/config', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ action: 'verify_pin', pin: cleanedPin }),
+      });
+
+      if (res.ok) {
+        sessionStorage.setItem('boardgame_admin_auth', 'true');
+        sessionStorage.setItem('boardgame_admin_active_pin', cleanedPin);
+        setIsAuthenticated(true);
+        fetchGames();
+        fetchApiKeyConfig();
+        return;
+      }
+    } catch {}
+
+    // Fallback check
     const currentPin = localStorage.getItem('boardgame_admin_pin') || '1234';
-    if (pinInput === currentPin || pinInput === 'admin') {
+    if (cleanedPin === currentPin || cleanedPin === 'admin') {
       sessionStorage.setItem('boardgame_admin_auth', 'true');
+      sessionStorage.setItem('boardgame_admin_active_pin', cleanedPin);
       setIsAuthenticated(true);
-      setPinError(false);
       fetchGames();
+      fetchApiKeyConfig();
     } else {
       setPinError(true);
     }
   };
 
+  const handleChangePin = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setPinChangeMessage(null);
+
+    if (!currentPinChangeInput) {
+      setPinChangeMessage({ text: 'Lütfen mevcut PIN kodunuzu girin.', isError: true });
+      return;
+    }
+    if (!newPinInput || newPinInput.trim().length < 4) {
+      setPinChangeMessage({ text: 'Yeni PIN en az 4 karakter olmalıdır.', isError: true });
+      return;
+    }
+    if (newPinInput !== confirmPinInput) {
+      setPinChangeMessage({ text: 'Yeni PIN ve onay şifresi birbiriyle eşleşmiyor!', isError: true });
+      return;
+    }
+
+    setIsChangingPin(true);
+    try {
+      const res = await fetch('/api/admin/config', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          action: 'change_pin',
+          currentPin: currentPinChangeInput.trim(),
+          newPin: newPinInput.trim(),
+        }),
+      });
+
+      const data = await res.json();
+      if (res.ok) {
+        sessionStorage.setItem('boardgame_admin_active_pin', newPinInput.trim());
+        localStorage.setItem('boardgame_admin_pin', newPinInput.trim());
+        setCurrentPinChangeInput('');
+        setNewPinInput('');
+        setConfirmPinInput('');
+        setPinChangeMessage({ text: '✅ Yönetici PIN kodu başarıyla güncellendi!', isError: false });
+        setTimeout(() => setPinChangeMessage(null), 4000);
+      } else {
+        setPinChangeMessage({ text: `❌ ${data.error || 'PIN güncellenemedi.'}`, isError: true });
+      }
+    } catch {
+      setPinChangeMessage({ text: '❌ Sunucuya bağlanırken bir hata oluştu.', isError: true });
+    } finally {
+      setIsChangingPin(false);
+    }
+  };
+
   const handleLogout = () => {
     sessionStorage.removeItem('boardgame_admin_auth');
+    sessionStorage.removeItem('boardgame_admin_active_pin');
     setIsAuthenticated(false);
     setPinInput('');
   };
@@ -77,7 +226,7 @@ export default function AdminPage() {
       const data = await res.json();
       setGames(data);
     } catch {
-      // API error handled gracefully
+      // Handled silently
     } finally {
       setIsLoading(false);
     }
@@ -113,49 +262,49 @@ export default function AdminPage() {
       players: '2-4 Kişi',
       minPlayers: 2,
       maxPlayers: 4,
-      duration: '45 dk',
+      duration: '45-60 Dk',
       age: '10+',
       difficulty: 'Orta',
       accentColor: '#38bdf8',
-      bgGradient: 'from-sky-500 to-blue-600',
-      badge: 'Yeni',
+      bgGradient: 'from-sky-400 to-blue-500',
+      badge: 'Yeni Eklenen',
       description: '',
       winCondition: '',
+      rulesKnowledge: '',
+      quickPrompts: [
+        'Nasıl kurulur?',
+        'Sıramda ne yapabilirim?',
+        'Puan nasıl hesaplanır?',
+        'Oyun nasıl biter?',
+      ],
       setupSteps: [
-        { title: 'Masayı Hazırlayın', description: 'Oyun tahtasını masanın ortasına yerleştirin.' }
+        { title: 'Oyun Alanını Hazırlayın', description: 'Ana tahtayı veya masayı ortaya yerleştirin.' },
       ],
       turnPhases: [
-        { phase: '1. Hamle', description: 'Sıranızdaki oyuncu hamlesini yapar.' }
+        { phase: '1. Hamle Aşaması', description: 'Oyuncu elindeki kartları oynar veya zar atar.' },
       ],
       faqs: [
-        { question: 'Oyun nasıl başlar?', answer: 'İlk oyuncu belirlendikten sonra saat yönünde başlar.' }
+        { question: 'Beraberlik durumunda ne olur?', answer: 'Eşit puan durumunda en çok kartı olan kazanır.', pageRef: 'Syf 4' },
       ],
-      quickPrompts: [
-        'Oyun nasıl kurulur?',
-        'Sıra bendeyken ne yapabilirim?'
-      ],
-      rulesKnowledge: ''
     });
   };
 
   const handleOpenEditGame = (game: GameData) => {
     setIsNewGame(false);
     setFormTab('basic');
-    // Deep copy to prevent accidental direct mutation
     setEditingGame(JSON.parse(JSON.stringify(game)));
   };
 
   const handleSaveGame = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!editingGame || !editingGame.title) {
-      alert('Lütfen oyun adını doldurun.');
+      alert('Lütfen oyun başlığını girin.');
       return;
     }
 
-    if (!editingGame.id) {
+    if (isNewGame && !editingGame.id) {
       editingGame.id = editingGame.title
         .toLowerCase()
-        .trim()
         .replace(/[^a-z0-9]/g, '-')
         .replace(/-+/g, '-');
     }
@@ -165,12 +314,13 @@ export default function AdminPage() {
       const res = await fetch('/api/games', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ game: editingGame })
+        body: JSON.stringify({ game: editingGame }),
       });
 
       if (res.ok) {
         setSaveSuccess(true);
         setTimeout(() => {
+          setIsSaving(false);
           setSaveSuccess(false);
           setEditingGame(null);
           fetchGames();
@@ -185,12 +335,11 @@ export default function AdminPage() {
     }
   };
 
-  // Helper functions for dynamic sub-items in form
   const addSetupStep = () => {
     if (!editingGame) return;
     setEditingGame({
       ...editingGame,
-      setupSteps: [...editingGame.setupSteps, { title: 'Yeni Adım', description: '' }]
+      setupSteps: [...editingGame.setupSteps, { title: 'Yeni Adım', description: '' }],
     });
   };
 
@@ -205,7 +354,7 @@ export default function AdminPage() {
     if (!editingGame) return;
     setEditingGame({
       ...editingGame,
-      setupSteps: editingGame.setupSteps.filter((_, i) => i !== index)
+      setupSteps: editingGame.setupSteps.filter((_, i) => i !== index),
     });
   };
 
@@ -213,7 +362,7 @@ export default function AdminPage() {
     if (!editingGame) return;
     setEditingGame({
       ...editingGame,
-      turnPhases: [...editingGame.turnPhases, { phase: 'Yeni Aşama', description: '' }]
+      turnPhases: [...editingGame.turnPhases, { phase: 'Yeni Aşama', description: '' }],
     });
   };
 
@@ -228,7 +377,7 @@ export default function AdminPage() {
     if (!editingGame) return;
     setEditingGame({
       ...editingGame,
-      turnPhases: editingGame.turnPhases.filter((_, i) => i !== index)
+      turnPhases: editingGame.turnPhases.filter((_, i) => i !== index),
     });
   };
 
@@ -236,7 +385,7 @@ export default function AdminPage() {
     if (!editingGame) return;
     setEditingGame({
       ...editingGame,
-      faqs: [...editingGame.faqs, { question: '', answer: '', pageRef: 'Syf 1' }]
+      faqs: [...editingGame.faqs, { question: '', answer: '', pageRef: 'Syf 1' }],
     });
   };
 
@@ -251,11 +400,11 @@ export default function AdminPage() {
     if (!editingGame) return;
     setEditingGame({
       ...editingGame,
-      faqs: editingGame.faqs.filter((_, i) => i !== index)
+      faqs: editingGame.faqs.filter((_, i) => i !== index),
     });
   };
 
-  // If not logged in, show simple PIN entry screen
+  // If not logged in, show PIN entry
   if (!isAuthenticated) {
     return (
       <div className="min-h-screen bg-[#f0fdf4] text-slate-900 flex flex-col">
@@ -270,7 +419,7 @@ export default function AdminPage() {
               YÖNETİCİ GİRİŞİ
             </h2>
             <p className="text-xs font-semibold text-slate-500 mb-6">
-              Etkinlik oyunlarını yönetmek için PIN kodunuzu girin. (Varsayılan PIN: 1234)
+              Etkinlik oyunlarını ve yapay zeka ayarlarını yönetmek için PIN girin. (Varsayılan PIN: 1234)
             </p>
 
             <form onSubmit={handleLogin} className="space-y-4">
@@ -280,10 +429,10 @@ export default function AdminPage() {
                   placeholder="PIN Kodu..."
                   value={pinInput}
                   onChange={(e) => setPinInput(e.target.value)}
-                  className="w-full text-center tracking-widest text-lg font-display font-black bg-slate-50 border-2 border-slate-900 rounded-xl px-4 py-2.5 focus:outline-none focus:bg-white shadow-[2px_2px_0px_0px_#0f172a]"
+                  className="w-full text-center tracking-widest text-lg font-display font-black bg-slate-50 border-2 border-slate-900 rounded-xl px-4 py-2.5 min-h-[44px] focus:outline-none focus:bg-white shadow-[2px_2px_0px_0px_#0f172a]"
                 />
                 {pinError && (
-                  <p className="text-xs text-red-500 font-bold mt-1.5 animate-bounce">
+                  <p className="text-xs text-rose-500 font-bold mt-1.5 animate-bounce">
                     Hatalı PIN! Tekrar deneyin.
                   </p>
                 )}
@@ -305,27 +454,27 @@ export default function AdminPage() {
   const gamesList = Object.values(games);
 
   return (
-    <div className="min-h-screen bg-[#f0fdf4] dark:bg-slate-950 text-slate-900 dark:text-slate-100 flex flex-col transition-colors">
+    <div className="min-h-screen bg-[#f0fdf4] text-slate-900 flex flex-col">
       <Navbar />
 
       {/* Admin Header */}
-      <div className="bg-white dark:bg-slate-900 border-b-[3px] border-slate-900 dark:border-sky-500 shadow-[0_3px_0_0_rgba(15,23,42,0.05)] transition-colors">
+      <div className="bg-white border-b-[3px] border-slate-900 shadow-[0_3px_0_0_rgba(15,23,42,0.05)]">
         <div className="max-w-6xl mx-auto px-4 py-6">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
             <div className="space-y-1">
               <div className="flex items-center gap-2">
-                <span className="px-2.5 py-0.5 rounded-lg bg-amber-200 dark:bg-amber-950 border-2 border-slate-900 dark:border-amber-500 text-slate-900 dark:text-amber-300 text-xs font-extrabold shadow-[2px_2px_0px_0px_#0f172a] flex items-center gap-1">
-                  <Shield className="w-3.5 h-3.5 text-amber-800 dark:text-amber-400" /> ETKİNLİK YÖNETİMİ
+                <span className="px-2.5 py-0.5 rounded-lg bg-amber-200 border-2 border-slate-900 text-slate-900 text-xs font-extrabold shadow-[2px_2px_0px_0px_#0f172a] flex items-center gap-1">
+                  <Shield className="w-3.5 h-3.5 text-amber-800" /> ETKİNLİK YÖNETİMİ
                 </span>
-                <span className="text-xs font-bold text-slate-500 dark:text-slate-400">
+                <span className="text-xs font-bold text-slate-500">
                   Toplam {gamesList.length} Oyun
                 </span>
               </div>
-              <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white font-display">
+              <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900 font-display">
                 Oyun & QR Yönetici Paneli
               </h1>
-              <p className="text-xs sm:text-sm font-semibold text-slate-600 dark:text-slate-300">
-                Haftalık etkinlikleriniz için yeni oyunlar ekleyin, kural kitapçıklarını güncelleyin ve masalara özel QR kartları basın.
+              <p className="text-xs sm:text-sm font-semibold text-slate-600">
+                Oyunları düzenleyin, yeni oyun ekleyin, Gemini AI anahtarını tanımlayın ve toplu QR kartları basın.
               </p>
             </div>
 
@@ -341,7 +490,7 @@ export default function AdminPage() {
               <Link
                 href="/admin/print-all"
                 target="_blank"
-                className="pixel-btn bg-sky-200 hover:bg-sky-300 dark:bg-sky-600 dark:hover:bg-sky-500 text-slate-900 dark:text-white min-h-[44px] px-3.5 py-2 text-xs font-extrabold flex items-center gap-1.5"
+                className="pixel-btn bg-sky-200 hover:bg-sky-300 text-slate-900 min-h-[44px] px-3.5 py-2 text-xs font-extrabold flex items-center gap-1.5"
               >
                 <Printer className="w-4 h-4 stroke-[2.5]" /> Toplu QR Yazdır
               </Link>
@@ -349,7 +498,7 @@ export default function AdminPage() {
               <button
                 type="button"
                 onClick={handleLogout}
-                className="pixel-btn bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 min-h-[44px] px-3 py-2 text-xs font-bold"
+                className="pixel-btn bg-slate-100 hover:bg-slate-200 text-slate-700 min-h-[44px] px-3 py-2 text-xs font-bold"
                 title="Çıkış Yap"
               >
                 Çıkış
@@ -360,7 +509,196 @@ export default function AdminPage() {
       </div>
 
       {/* Main Admin Content */}
-      <main className="flex-1 max-w-6xl w-full mx-auto p-4 sm:p-6">
+      <main className="flex-1 max-w-6xl w-full mx-auto p-4 sm:p-6 space-y-6">
+        
+        {/* SETTINGS SECTION: GEMINI API KEY & ADMIN PIN MANAGEMENT */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          {/* SECURE GEMINI API KEY MANAGEMENT CARD */}
+          <div className="pixel-box-card bg-white p-5 border-[3px] border-slate-900 flex flex-col justify-between">
+            <div>
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b-2 border-slate-900 mb-4">
+                <div className="flex items-center gap-2.5">
+                  <div className="w-9 h-9 rounded-xl bg-amber-200 border-2 border-slate-900 shadow-[2px_2px_0px_0px_#0f172a] flex items-center justify-center">
+                    <Key className="w-5 h-5 text-slate-900" />
+                  </div>
+                  <div>
+                    <h2 className="font-display font-extrabold text-base sm:text-lg text-slate-900">
+                      Gemini AI Anahtarı
+                    </h2>
+                    <p className="text-xs font-semibold text-slate-500">
+                      Sunucu tarafında şifreli olarak korunur.
+                    </p>
+                  </div>
+                </div>
+
+                <div className="flex items-center gap-2">
+                  <span
+                    className={`text-xs font-bold px-2.5 py-1 rounded-lg border-2 border-slate-900 shadow-[1px_1px_0px_0px_#0f172a] flex items-center gap-1.5 ${
+                      apiKeyStatus.hasKey
+                        ? 'bg-emerald-200 text-slate-900'
+                        : 'bg-amber-100 text-amber-900'
+                    }`}
+                  >
+                    <span
+                      className={`w-2 h-2 rounded-full border border-slate-900 ${
+                        apiKeyStatus.hasKey ? 'bg-emerald-500 animate-pulse' : 'bg-amber-400'
+                      }`}
+                    />
+                    {apiKeyStatus.hasKey ? 'Gemini AI Aktif' : 'Dahili Motor Aktif'}
+                  </span>
+                </div>
+              </div>
+
+              <div className="space-y-3">
+                <p className="text-xs font-semibold text-slate-600 leading-relaxed">
+                  {apiKeyStatus.hasKey ? (
+                    <>
+                      Aktif anahtar:{' '}
+                      <code className="bg-slate-100 border border-slate-300 px-2 py-0.5 rounded font-mono font-bold text-slate-900">
+                        {apiKeyStatus.maskedKey}
+                      </code>{' '}
+                      ({apiKeyStatus.source === 'env_variable' ? '.env ortamı' : 'yönetici kaydı'})
+                    </>
+                  ) : (
+                    'API anahtarı girilmediğinde sistem 61 oyunluk kural motoruyla anında çalışır.'
+                  )}
+                </p>
+
+                <div className="flex items-center gap-3 text-xs font-bold">
+                  <a
+                    href="https://aistudio.google.com/app/apikey"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-sky-600 hover:underline flex items-center gap-1"
+                  >
+                    Ücretsiz Key Al <ExternalLink className="w-3.5 h-3.5" />
+                  </a>
+
+                  {apiKeyStatus.hasKey && (
+                    <button
+                      type="button"
+                      onClick={handleDeleteApiKey}
+                      className="text-rose-600 hover:underline"
+                    >
+                      Anahtarı Kaldır
+                    </button>
+                  )}
+                </div>
+
+                <form onSubmit={handleSaveApiKey} className="flex flex-col sm:flex-row gap-2 pt-1">
+                  <input
+                    type="password"
+                    placeholder="Yeni API Key (AIzaSy...)"
+                    value={newKeyInput}
+                    onChange={(e) => setNewKeyInput(e.target.value)}
+                    className="flex-1 min-h-[44px] bg-slate-50 border-2 border-slate-900 rounded-xl px-3 py-2 text-xs font-semibold text-slate-900 placeholder-slate-400 focus:outline-none focus:bg-white shadow-[2px_2px_0px_0px_#0f172a]"
+                  />
+                  <button
+                    type="submit"
+                    disabled={!newKeyInput.trim() || isSavingKey}
+                    className="pixel-btn pixel-btn-primary min-h-[44px] px-4 py-2 text-xs font-extrabold disabled:opacity-40 shrink-0"
+                  >
+                    {isSavingKey ? 'Kaydediliyor...' : 'Kaydet'}
+                  </button>
+                </form>
+              </div>
+            </div>
+
+            {keyMessage && (
+              <div className="mt-3 text-xs font-bold text-slate-800 bg-sky-50 border-2 border-slate-900 p-2 rounded-lg shadow-[2px_2px_0px_0px_#0f172a]">
+                {keyMessage}
+              </div>
+            )}
+          </div>
+
+          {/* SECURE ADMIN PIN MANAGEMENT CARD */}
+          <div className="pixel-box-card bg-white p-5 border-[3px] border-slate-900 flex flex-col justify-between">
+            <div>
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b-2 border-slate-900 mb-4">
+                <div className="flex items-center gap-2.5">
+                  <div className="w-9 h-9 rounded-xl bg-purple-200 border-2 border-slate-900 shadow-[2px_2px_0px_0px_#0f172a] flex items-center justify-center">
+                    <Lock className="w-5 h-5 text-slate-900" />
+                  </div>
+                  <div>
+                    <h2 className="font-display font-extrabold text-base sm:text-lg text-slate-900">
+                      Yönetici Şifresi (PIN)
+                    </h2>
+                    <p className="text-xs font-semibold text-slate-500">
+                      Yönetici paneli giriş PIN kodunu güncelleyin.
+                    </p>
+                  </div>
+                </div>
+
+                <div className="text-xs font-bold text-slate-600 bg-slate-100 border-2 border-slate-900 px-2.5 py-1 rounded-lg shadow-[1px_1px_0px_0px_#0f172a]">
+                  En az 4 Karakter
+                </div>
+              </div>
+
+              <form onSubmit={handleChangePin} className="space-y-3">
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
+                  <div>
+                    <label className="block text-[11px] font-bold text-slate-700 mb-1">Mevcut PIN</label>
+                    <input
+                      type="password"
+                      placeholder="Mevcut..."
+                      value={currentPinChangeInput}
+                      onChange={(e) => setCurrentPinChangeInput(e.target.value)}
+                      className="w-full min-h-[44px] bg-slate-50 border-2 border-slate-900 rounded-xl px-3 py-2 text-xs font-bold text-slate-900 placeholder-slate-400 focus:outline-none focus:bg-white shadow-[2px_2px_0px_0px_#0f172a]"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-[11px] font-bold text-slate-700 mb-1">Yeni PIN</label>
+                    <input
+                      type="password"
+                      placeholder="Yeni şifre..."
+                      value={newPinInput}
+                      onChange={(e) => setNewPinInput(e.target.value)}
+                      className="w-full min-h-[44px] bg-slate-50 border-2 border-slate-900 rounded-xl px-3 py-2 text-xs font-bold text-slate-900 placeholder-slate-400 focus:outline-none focus:bg-white shadow-[2px_2px_0px_0px_#0f172a]"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-[11px] font-bold text-slate-700 mb-1">Yeni PIN Tekrar</label>
+                    <input
+                      type="password"
+                      placeholder="Tekrar..."
+                      value={confirmPinInput}
+                      onChange={(e) => setConfirmPinInput(e.target.value)}
+                      className="w-full min-h-[44px] bg-slate-50 border-2 border-slate-900 rounded-xl px-3 py-2 text-xs font-bold text-slate-900 placeholder-slate-400 focus:outline-none focus:bg-white shadow-[2px_2px_0px_0px_#0f172a]"
+                    />
+                  </div>
+                </div>
+
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pt-1">
+                  <p className="text-[11px] font-semibold text-slate-500">
+                    Varsayılan başlangıç PIN kodu: <span className="font-mono font-bold text-slate-800">1234</span>
+                  </p>
+                  <button
+                    type="submit"
+                    disabled={isChangingPin || !currentPinChangeInput || !newPinInput || !confirmPinInput}
+                    className="pixel-btn pixel-btn-accent min-h-[44px] px-4 py-2 text-xs font-extrabold disabled:opacity-40 shrink-0 flex items-center justify-center gap-1.5"
+                  >
+                    <Lock className="w-3.5 h-3.5" />
+                    {isChangingPin ? 'Kaydediliyor...' : 'Şifreyi Değiştir'}
+                  </button>
+                </div>
+              </form>
+            </div>
+
+            {pinChangeMessage && (
+              <div
+                className={`mt-3 text-xs font-bold p-2.5 rounded-lg border-2 border-slate-900 shadow-[2px_2px_0px_0px_#0f172a] ${
+                  pinChangeMessage.isError
+                    ? 'bg-rose-100 text-rose-900'
+                    : 'bg-emerald-100 text-emerald-900'
+                }`}
+              >
+                {pinChangeMessage.text}
+              </div>
+            )}
+          </div>
+        </div>
+
+        {/* GAMES LIST SECTION */}
         {isLoading ? (
           <div className="text-center py-20 font-bold text-slate-500">
             Oyunlar yükleniyor...
@@ -411,11 +749,11 @@ export default function AdminPage() {
                   </div>
 
                   {/* Actions */}
-                  <div className="grid grid-cols-3 gap-2 pt-2 border-t-2 border-slate-200 dark:border-slate-700">
+                  <div className="grid grid-cols-3 gap-2 pt-2 border-t-2 border-slate-200">
                     <button
                       type="button"
                       onClick={() => handleOpenEditGame(g)}
-                      className="pixel-btn bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-900 dark:text-slate-100 py-1.5 min-h-[44px] text-xs font-bold flex items-center justify-center gap-1"
+                      className="pixel-btn bg-slate-100 hover:bg-slate-200 text-slate-900 py-1.5 min-h-[44px] text-xs font-bold flex items-center justify-center gap-1"
                     >
                       <Edit3 className="w-3.5 h-3.5" /> Düzenle
                     </button>
@@ -423,7 +761,7 @@ export default function AdminPage() {
                     <Link
                       href={`/print/${g.id}`}
                       target="_blank"
-                      className="pixel-btn bg-emerald-100 hover:bg-emerald-200 dark:bg-emerald-950 dark:hover:bg-emerald-900 text-slate-900 dark:text-emerald-300 py-1.5 min-h-[44px] text-xs font-bold flex items-center justify-center gap-1"
+                      className="pixel-btn bg-emerald-100 hover:bg-emerald-200 text-slate-900 py-1.5 min-h-[44px] text-xs font-bold flex items-center justify-center gap-1"
                       title="Masa Kartı Çıkar"
                     >
                       <Printer className="w-3.5 h-3.5" /> QR Bas
@@ -432,7 +770,7 @@ export default function AdminPage() {
                     <button
                       type="button"
                       onClick={() => handleDeleteGame(g.id, g.title)}
-                      className="pixel-btn bg-rose-100 hover:bg-rose-200 dark:bg-rose-950 dark:hover:bg-rose-900 text-rose-900 dark:text-rose-300 py-1.5 min-h-[44px] text-xs font-bold flex items-center justify-center gap-1"
+                      className="pixel-btn bg-rose-100 hover:bg-rose-200 text-rose-900 py-1.5 min-h-[44px] text-xs font-bold flex items-center justify-center gap-1"
                       title="Oyunu Sil"
                     >
                       <Trash2 className="w-3.5 h-3.5" /> Sil
@@ -460,10 +798,11 @@ export default function AdminPage() {
                 </p>
               </div>
               <button
+                type="button"
                 onClick={() => setEditingGame(null)}
-                className="p-1.5 rounded-lg border-2 border-slate-900 bg-white hover:bg-slate-100 shadow-[2px_2px_0px_0px_#0f172a]"
+                className="min-h-[44px] min-w-[44px] flex items-center justify-center rounded-xl border-2 border-slate-900 bg-white hover:bg-slate-100 shadow-[2px_2px_0px_0px_#0f172a]"
               >
-                <X className="w-4 h-4" />
+                <X className="w-5 h-5" />
               </button>
             </div>
 
@@ -472,8 +811,8 @@ export default function AdminPage() {
               <button
                 type="button"
                 onClick={() => setFormTab('basic')}
-                className={`px-3 py-1.5 rounded-t-lg font-bold text-xs border-t-2 border-x-2 border-slate-900 transition ${
-                  formTab === 'basic' ? 'bg-sky-200 text-slate-900 -mb-px' : 'bg-slate-100 text-slate-600'
+                className={`pixel-btn min-h-[44px] px-3 py-1.5 text-xs font-bold shrink-0 ${
+                  formTab === 'basic' ? 'bg-sky-300 text-slate-900' : 'bg-white text-slate-600'
                 }`}
               >
                 Temel Bilgiler
@@ -481,136 +820,138 @@ export default function AdminPage() {
               <button
                 type="button"
                 onClick={() => setFormTab('rules')}
-                className={`px-3 py-1.5 rounded-t-lg font-bold text-xs border-t-2 border-x-2 border-slate-900 transition ${
-                  formTab === 'rules' ? 'bg-amber-200 text-slate-900 -mb-px' : 'bg-slate-100 text-slate-600'
+                className={`pixel-btn min-h-[44px] px-3 py-1.5 text-xs font-bold shrink-0 ${
+                  formTab === 'rules' ? 'bg-amber-300 text-slate-900' : 'bg-white text-slate-600'
                 }`}
               >
-                Kural Kitapçığı & AI Prompt
+                <Layers className="w-3.5 h-3.5 mr-1" /> Kural Özeti
               </button>
               <button
                 type="button"
                 onClick={() => setFormTab('setup')}
-                className={`px-3 py-1.5 rounded-t-lg font-bold text-xs border-t-2 border-x-2 border-slate-900 transition ${
-                  formTab === 'setup' ? 'bg-emerald-200 text-slate-900 -mb-px' : 'bg-slate-100 text-slate-600'
+                className={`pixel-btn min-h-[44px] px-3 py-1.5 text-xs font-bold shrink-0 ${
+                  formTab === 'setup' ? 'bg-emerald-300 text-slate-900' : 'bg-white text-slate-600'
                 }`}
               >
-                Kurulum Adımları ({editingGame.setupSteps.length})
+                <BookOpen className="w-3.5 h-3.5 mr-1" /> Kurulum ({editingGame.setupSteps.length})
               </button>
               <button
                 type="button"
                 onClick={() => setFormTab('turn')}
-                className={`px-3 py-1.5 rounded-t-lg font-bold text-xs border-t-2 border-x-2 border-slate-900 transition ${
-                  formTab === 'turn' ? 'bg-teal-200 text-slate-900 -mb-px' : 'bg-slate-100 text-slate-600'
+                className={`pixel-btn min-h-[44px] px-3 py-1.5 text-xs font-bold shrink-0 ${
+                  formTab === 'turn' ? 'bg-purple-300 text-slate-900' : 'bg-white text-slate-600'
                 }`}
               >
-                Tur Akışı ({editingGame.turnPhases.length})
+                <RotateCcw className="w-3.5 h-3.5 mr-1" /> Tur Akışı ({editingGame.turnPhases.length})
               </button>
               <button
                 type="button"
                 onClick={() => setFormTab('faq')}
-                className={`px-3 py-1.5 rounded-t-lg font-bold text-xs border-t-2 border-x-2 border-slate-900 transition ${
-                  formTab === 'faq' ? 'bg-purple-200 text-slate-900 -mb-px' : 'bg-slate-100 text-slate-600'
+                className={`pixel-btn min-h-[44px] px-3 py-1.5 text-xs font-bold shrink-0 ${
+                  formTab === 'faq' ? 'bg-rose-300 text-slate-900' : 'bg-white text-slate-600'
                 }`}
               >
-                Sık Sorulanlar ({editingGame.faqs.length})
+                <HelpCircle className="w-3.5 h-3.5 mr-1" /> SSS & Kararlar ({editingGame.faqs.length})
               </button>
             </div>
 
-            {/* Modal Body */}
+            {/* Modal Form Content */}
             <form onSubmit={handleSaveGame} className="flex-1 overflow-y-auto p-4 sm:p-6 space-y-4">
               {/* TAB 1: BASIC INFO */}
               {formTab === 'basic' && (
-                <div className="space-y-3.5">
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <div className="space-y-4">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
-                      <label className="block text-xs font-bold text-slate-700 mb-1">
-                        Oyun ID (URL Slug, örn: catan, secret-hitler)
-                      </label>
-                      <input
-                        type="text"
-                        required
-                        disabled={!isNewGame}
-                        value={editingGame.id}
-                        onChange={(e) => setEditingGame({ ...editingGame, id: e.target.value })}
-                        className="w-full bg-slate-50 border-2 border-slate-900 rounded-xl px-3 py-2 text-xs font-semibold text-slate-900 disabled:opacity-60"
-                      />
-                    </div>
-                    <div>
-                      <label className="block text-xs font-bold text-slate-700 mb-1">
-                        Oyun Başlığı (Title)
+                      <label className="block text-xs font-bold text-slate-700 uppercase mb-1">
+                        Oyun Adı *
                       </label>
                       <input
                         type="text"
                         required
                         value={editingGame.title}
                         onChange={(e) => setEditingGame({ ...editingGame, title: e.target.value })}
-                        className="w-full bg-slate-50 border-2 border-slate-900 rounded-xl px-3 py-2 text-xs font-semibold text-slate-900"
+                        className="w-full min-h-[44px] bg-slate-50 border-2 border-slate-900 rounded-xl px-3 py-2 text-xs font-bold text-slate-900 shadow-[2px_2px_0px_0px_#0f172a]"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-xs font-bold text-slate-700 uppercase mb-1">
+                        Kategori
+                      </label>
+                      <input
+                        type="text"
+                        value={editingGame.category}
+                        onChange={(e) => setEditingGame({ ...editingGame, category: e.target.value })}
+                        className="w-full min-h-[44px] bg-slate-50 border-2 border-slate-900 rounded-xl px-3 py-2 text-xs font-bold text-slate-900 shadow-[2px_2px_0px_0px_#0f172a]"
                       />
                     </div>
                   </div>
 
                   <div>
-                    <label className="block text-xs font-bold text-slate-700 mb-1">
-                      Slogan (Kısa Etkileyici Açıklama)
+                    <label className="block text-xs font-bold text-slate-700 uppercase mb-1">
+                      Kısa Tanıtım / Slogan
                     </label>
                     <input
                       type="text"
                       value={editingGame.tagline}
                       onChange={(e) => setEditingGame({ ...editingGame, tagline: e.target.value })}
-                      className="w-full bg-slate-50 border-2 border-slate-900 rounded-xl px-3 py-2 text-xs font-semibold text-slate-900"
+                      className="w-full min-h-[44px] bg-slate-50 border-2 border-slate-900 rounded-xl px-3 py-2 text-xs font-bold text-slate-900 shadow-[2px_2px_0px_0px_#0f172a]"
                     />
                   </div>
 
-                  <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                     <div>
-                      <label className="block text-xs font-bold text-slate-700 mb-1">Kategori</label>
-                      <input
-                        type="text"
-                        value={editingGame.category}
-                        onChange={(e) => setEditingGame({ ...editingGame, category: e.target.value })}
-                        className="w-full bg-slate-50 border-2 border-slate-900 rounded-xl px-3 py-2 text-xs font-semibold text-slate-900"
-                      />
-                    </div>
-                    <div>
-                      <label className="block text-xs font-bold text-slate-700 mb-1">Oyuncu Sayısı</label>
+                      <label className="block text-xs font-bold text-slate-700 uppercase mb-1">
+                        Oyuncu Sayısı Metni
+                      </label>
                       <input
                         type="text"
                         value={editingGame.players}
                         onChange={(e) => setEditingGame({ ...editingGame, players: e.target.value })}
-                        className="w-full bg-slate-50 border-2 border-slate-900 rounded-xl px-3 py-2 text-xs font-semibold text-slate-900"
+                        className="w-full min-h-[44px] bg-slate-50 border-2 border-slate-900 rounded-xl px-3 py-2 text-xs font-bold text-slate-900 shadow-[2px_2px_0px_0px_#0f172a]"
                       />
                     </div>
                     <div>
-                      <label className="block text-xs font-bold text-slate-700 mb-1">Süre</label>
+                      <label className="block text-xs font-bold text-slate-700 uppercase mb-1">
+                        Oyun Süresi
+                      </label>
                       <input
                         type="text"
                         value={editingGame.duration}
                         onChange={(e) => setEditingGame({ ...editingGame, duration: e.target.value })}
-                        className="w-full bg-slate-50 border-2 border-slate-900 rounded-xl px-3 py-2 text-xs font-semibold text-slate-900"
+                        className="w-full min-h-[44px] bg-slate-50 border-2 border-slate-900 rounded-xl px-3 py-2 text-xs font-bold text-slate-900 shadow-[2px_2px_0px_0px_#0f172a]"
                       />
                     </div>
                     <div>
-                      <label className="block text-xs font-bold text-slate-700 mb-1">Zorluk</label>
+                      <label className="block text-xs font-bold text-slate-700 uppercase mb-1">
+                        Zorluk Derecesi
+                      </label>
                       <select
                         value={editingGame.difficulty}
-                        onChange={(e) => setEditingGame({ ...editingGame, difficulty: e.target.value as any })}
-                        className="w-full bg-slate-50 border-2 border-slate-900 rounded-xl px-3 py-2 text-xs font-semibold text-slate-900"
+                        onChange={(e) =>
+                          setEditingGame({
+                            ...editingGame,
+                            difficulty: e.target.value as 'Kolay' | 'Orta' | 'Zor' | 'Kolay - Orta',
+                          })
+                        }
+                        className="w-full min-h-[44px] bg-slate-50 border-2 border-slate-900 rounded-xl px-3 py-2 text-xs font-bold text-slate-900 shadow-[2px_2px_0px_0px_#0f172a]"
                       >
                         <option value="Kolay">Kolay</option>
+                        <option value="Kolay - Orta">Kolay - Orta</option>
                         <option value="Orta">Orta</option>
                         <option value="Zor">Zor</option>
-                        <option value="Kolay - Orta">Kolay - Orta</option>
                       </select>
                     </div>
                   </div>
 
                   <div>
-                    <label className="block text-xs font-bold text-slate-700 mb-1">Kazanma Şartı</label>
-                    <textarea
-                      rows={2}
+                    <label className="block text-xs font-bold text-slate-700 uppercase mb-1">
+                      Kazanma Şartı
+                    </label>
+                    <input
+                      type="text"
                       value={editingGame.winCondition}
                       onChange={(e) => setEditingGame({ ...editingGame, winCondition: e.target.value })}
-                      className="w-full bg-slate-50 border-2 border-slate-900 rounded-xl p-3 text-xs font-semibold text-slate-900"
+                      className="w-full min-h-[44px] bg-slate-50 border-2 border-slate-900 rounded-xl px-3 py-2 text-xs font-bold text-slate-900 shadow-[2px_2px_0px_0px_#0f172a]"
                     />
                   </div>
                 </div>
@@ -618,17 +959,18 @@ export default function AdminPage() {
 
               {/* TAB 2: RULES KNOWLEDGE */}
               {formTab === 'rules' && (
-                <div className="space-y-3">
-                  <p className="text-xs text-slate-500 font-semibold leading-relaxed">
-                    Yapay Zekanın (ve dahili kural motorunun) bu oyunu eksiksiz bilmesi için resmi kural kitapçığı özetini, özel terimleri ve istisnaları buraya yazın.
-                  </p>
-                  <textarea
-                    rows={12}
-                    value={editingGame.rulesKnowledge}
-                    onChange={(e) => setEditingGame({ ...editingGame, rulesKnowledge: e.target.value })}
-                    placeholder="Oyun Kuralları, Puanlama Detayları, Hırsız / Savaş Mekanikleri vb..."
-                    className="w-full bg-slate-50 border-2 border-slate-900 rounded-xl p-3 text-xs font-mono font-medium text-slate-900"
-                  />
+                <div className="space-y-4">
+                  <div>
+                    <label className="block text-xs font-bold text-slate-700 uppercase mb-1">
+                      Kural Özeti & Hakem Bilgi Tabanı (AI & Dahili Motor Buradan Beslenir)
+                    </label>
+                    <textarea
+                      rows={12}
+                      value={editingGame.rulesKnowledge}
+                      onChange={(e) => setEditingGame({ ...editingGame, rulesKnowledge: e.target.value })}
+                      className="w-full bg-slate-50 border-2 border-slate-900 rounded-xl p-3 text-xs font-medium text-slate-900 font-mono shadow-[2px_2px_0px_0px_#0f172a]"
+                    />
+                  </div>
                 </div>
               )}
 
@@ -636,11 +978,11 @@ export default function AdminPage() {
               {formTab === 'setup' && (
                 <div className="space-y-3">
                   <div className="flex items-center justify-between">
-                    <span className="text-xs font-bold text-slate-600">Adım Adım Kurulum</span>
+                    <span className="text-xs font-bold text-slate-700">Adım Adım Masa Kurulumu</span>
                     <button
                       type="button"
                       onClick={addSetupStep}
-                      className="pixel-btn bg-emerald-200 text-slate-900 px-3 py-1 text-xs font-bold flex items-center gap-1"
+                      className="pixel-btn bg-emerald-200 text-slate-900 px-3 py-1.5 min-h-[44px] text-xs font-bold flex items-center gap-1"
                     >
                       <Plus className="w-3.5 h-3.5" /> Adım Ekle
                     </button>
@@ -649,34 +991,28 @@ export default function AdminPage() {
                   {editingGame.setupSteps.map((step, idx) => (
                     <div key={idx} className="p-3 bg-slate-50 border-2 border-slate-900 rounded-xl space-y-2">
                       <div className="flex items-center justify-between gap-2">
-                        <span className="font-bold text-xs text-slate-800">Adım {idx + 1} Başlığı:</span>
+                        <span className="text-xs font-black text-slate-900">Adım {idx + 1}</span>
                         <button
                           type="button"
                           onClick={() => removeSetupStep(idx)}
-                          className="text-red-500 hover:text-red-700 text-xs font-bold"
+                          className="min-h-[36px] min-w-[36px] flex items-center justify-center text-rose-500 hover:text-rose-700"
                         >
-                          Sil
+                          <Trash2 className="w-4 h-4" />
                         </button>
                       </div>
                       <input
                         type="text"
+                        placeholder="Adım Başlığı (Örn: Taşları Dağıtın)"
                         value={step.title}
                         onChange={(e) => updateSetupStep(idx, 'title', e.target.value)}
-                        className="w-full bg-white border border-slate-300 rounded-lg px-2.5 py-1.5 text-xs font-bold"
+                        className="w-full min-h-[40px] bg-white border border-slate-300 rounded-lg p-2 text-xs font-bold text-slate-900"
                       />
                       <textarea
                         rows={2}
-                        placeholder="Adım açıklaması..."
+                        placeholder="Adım Açıklaması..."
                         value={step.description}
                         onChange={(e) => updateSetupStep(idx, 'description', e.target.value)}
-                        className="w-full bg-white border border-slate-300 rounded-lg p-2 text-xs font-medium"
-                      />
-                      <input
-                        type="text"
-                        placeholder="Önemli ipucu (isteğe bağlı)..."
-                        value={step.tip || ''}
-                        onChange={(e) => updateSetupStep(idx, 'tip', e.target.value)}
-                        className="w-full bg-amber-50 border border-amber-300 rounded-lg px-2.5 py-1 text-xs text-amber-900 font-semibold"
+                        className="w-full bg-white border border-slate-300 rounded-lg p-2 text-xs font-medium text-slate-900"
                       />
                     </div>
                   ))}
@@ -687,11 +1023,11 @@ export default function AdminPage() {
               {formTab === 'turn' && (
                 <div className="space-y-3">
                   <div className="flex items-center justify-between">
-                    <span className="text-xs font-bold text-slate-600">Sıra Bendeyken Aşamaları</span>
+                    <span className="text-xs font-bold text-slate-700">Tur Akışı Aşamaları</span>
                     <button
                       type="button"
                       onClick={addTurnPhase}
-                      className="pixel-btn bg-teal-200 text-slate-900 px-3 py-1 text-xs font-bold flex items-center gap-1"
+                      className="pixel-btn bg-purple-200 text-slate-900 px-3 py-1.5 min-h-[44px] text-xs font-bold flex items-center gap-1"
                     >
                       <Plus className="w-3.5 h-3.5" /> Aşama Ekle
                     </button>
@@ -700,44 +1036,44 @@ export default function AdminPage() {
                   {editingGame.turnPhases.map((phase, idx) => (
                     <div key={idx} className="p-3 bg-slate-50 border-2 border-slate-900 rounded-xl space-y-2">
                       <div className="flex items-center justify-between gap-2">
-                        <span className="font-bold text-xs text-slate-800">Aşama {idx + 1}:</span>
+                        <input
+                          type="text"
+                          placeholder="Aşama Başlığı"
+                          value={phase.phase}
+                          onChange={(e) => updateTurnPhase(idx, 'phase', e.target.value)}
+                          className="w-full min-h-[40px] bg-white border border-slate-300 rounded-lg p-2 text-xs font-bold text-slate-900"
+                        />
                         <button
                           type="button"
                           onClick={() => removeTurnPhase(idx)}
-                          className="text-red-500 hover:text-red-700 text-xs font-bold"
+                          className="min-h-[36px] min-w-[36px] flex items-center justify-center text-rose-500 hover:text-rose-700 shrink-0"
                         >
-                          Sil
+                          <Trash2 className="w-4 h-4" />
                         </button>
                       </div>
-                      <input
-                        type="text"
-                        value={phase.phase}
-                        onChange={(e) => updateTurnPhase(idx, 'phase', e.target.value)}
-                        className="w-full bg-white border border-slate-300 rounded-lg px-2.5 py-1.5 text-xs font-bold"
-                      />
                       <textarea
                         rows={2}
                         placeholder="Aşama açıklaması..."
                         value={phase.description}
                         onChange={(e) => updateTurnPhase(idx, 'description', e.target.value)}
-                        className="w-full bg-white border border-slate-300 rounded-lg p-2 text-xs font-medium"
+                        className="w-full bg-white border border-slate-300 rounded-lg p-2 text-xs font-medium text-slate-900"
                       />
                     </div>
                   ))}
                 </div>
               )}
 
-              {/* TAB 5: FAQ & ERRATA */}
+              {/* TAB 5: FAQS */}
               {formTab === 'faq' && (
                 <div className="space-y-3">
                   <div className="flex items-center justify-between">
-                    <span className="text-xs font-bold text-slate-600">Sık Sorulan Kural Çelişkileri</span>
+                    <span className="text-xs font-bold text-slate-700">Sık Sorulan Sorular & Kural Çözümleri</span>
                     <button
                       type="button"
                       onClick={addFaq}
-                      className="pixel-btn bg-purple-200 text-slate-900 px-3 py-1 text-xs font-bold flex items-center gap-1"
+                      className="pixel-btn bg-rose-200 text-slate-900 px-3 py-1.5 min-h-[44px] text-xs font-bold flex items-center gap-1"
                     >
-                      <Plus className="w-3.5 h-3.5" /> SSS Ekle
+                      <Plus className="w-3.5 h-3.5" /> Soru Ekle
                     </button>
                   </div>
 
@@ -746,51 +1082,51 @@ export default function AdminPage() {
                       <div className="flex items-center justify-between gap-2">
                         <input
                           type="text"
-                          placeholder="Soru..."
+                          placeholder="Kural Sorusu (Örn: Aynı turda iki kez ticaret yapılır mı?)"
                           value={faq.question}
                           onChange={(e) => updateFaq(idx, 'question', e.target.value)}
-                          className="flex-1 bg-white border border-slate-300 rounded-lg px-2.5 py-1.5 text-xs font-bold"
+                          className="w-full min-h-[40px] bg-white border border-slate-300 rounded-lg p-2 text-xs font-bold text-slate-900"
                         />
                         <input
                           type="text"
-                          placeholder="Ref (Syf 4)"
+                          placeholder="Sayfa Ref"
                           value={faq.pageRef || ''}
                           onChange={(e) => updateFaq(idx, 'pageRef', e.target.value)}
-                          className="w-24 bg-white border border-slate-300 rounded-lg px-2 py-1.5 text-xs font-mono"
+                          className="w-24 min-h-[40px] bg-white border border-slate-300 rounded-lg p-2 text-xs font-bold text-slate-900 shrink-0"
                         />
                         <button
                           type="button"
                           onClick={() => removeFaq(idx)}
-                          className="text-red-500 hover:text-red-700 text-xs font-bold"
+                          className="min-h-[36px] min-w-[36px] flex items-center justify-center text-rose-500 hover:text-rose-700 shrink-0"
                         >
-                          Sil
+                          <Trash2 className="w-4 h-4" />
                         </button>
                       </div>
                       <textarea
                         rows={2}
-                        placeholder="Resmi hakem cevabı..."
+                        placeholder="Resmi Kural Hakemi Cevabı..."
                         value={faq.answer}
                         onChange={(e) => updateFaq(idx, 'answer', e.target.value)}
-                        className="w-full bg-white border border-slate-300 rounded-lg p-2 text-xs font-medium"
+                        className="w-full bg-white border border-slate-300 rounded-lg p-2 text-xs font-medium text-slate-900"
                       />
                     </div>
                   ))}
                 </div>
               )}
 
-              {/* Modal Footer */}
-              <div className="pt-4 border-t-2 border-slate-900 flex justify-end gap-2.5">
+              {/* Modal Footer Controls */}
+              <div className="pt-4 border-t-2 border-slate-900 flex justify-end gap-3 sticky bottom-0 bg-white">
                 <button
                   type="button"
                   onClick={() => setEditingGame(null)}
-                  className="pixel-btn bg-slate-100 px-4 py-2 text-xs font-bold text-slate-800"
+                  className="pixel-btn bg-slate-100 hover:bg-slate-200 text-slate-800 px-4 py-2 text-xs font-bold min-h-[44px]"
                 >
-                  İptal
+                  Vazgeç
                 </button>
                 <button
                   type="submit"
                   disabled={isSaving}
-                  className="pixel-btn pixel-btn-accent px-5 py-2 text-xs font-extrabold flex items-center gap-1.5"
+                  className="pixel-btn pixel-btn-primary px-6 py-2 text-xs font-extrabold flex items-center gap-1.5 min-h-[44px]"
                 >
                   {saveSuccess ? (
                     <>
@@ -798,7 +1134,7 @@ export default function AdminPage() {
                     </>
                   ) : (
                     <>
-                      <Sparkles className="w-4 h-4" /> Oyunu Kaydet
+                      <Sparkles className="w-4 h-4" /> {isSaving ? 'Kaydediliyor...' : 'Değişiklikleri Kaydet'}
                     </>
                   )}
                 </button>

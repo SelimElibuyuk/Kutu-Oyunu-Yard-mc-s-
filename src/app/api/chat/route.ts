@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getStoredGames } from '@/data/storage';
+import { getStoredGames, getAdminConfig } from '@/data/storage';
 import { GameData, SetupStep, TurnPhase } from '@/data/games';
 import { GoogleGenAI } from '@google/genai';
 import { checkRateLimit } from '@/lib/rateLimit';
@@ -32,7 +32,7 @@ export async function POST(req: NextRequest) {
 
   try {
     const body = await req.json();
-    const { gameId, messages, userApiKey } = body;
+    const { gameId, messages } = body;
 
     if (!gameId || !Array.isArray(messages) || messages.length === 0) {
       return NextResponse.json(
@@ -51,10 +51,12 @@ export async function POST(req: NextRequest) {
     }
 
     const lastMessage = messages[messages.length - 1]?.content || '';
-    const headerApiKey = req.headers.get('x-gemini-api-key');
-    const apiKey = userApiKey || headerApiKey || process.env.GEMINI_API_KEY;
+    
+    // Read from environment variable or admin server configuration
+    const adminConfig = getAdminConfig();
+    const apiKey = process.env.GEMINI_API_KEY || adminConfig.geminiApiKey;
 
-    // 2. If Gemini API Key is configured/provided, invoke Google GenAI SDK
+    // 2. If Gemini API Key is configured on the server, invoke Google GenAI SDK
     if (apiKey) {
       try {
         const ai = new GoogleGenAI({ apiKey });
@@ -98,11 +100,8 @@ YÖNERGELERİN:
 
         const reply = response.text || 'Kural analizi yapılamadı. Lütfen tekrar sorunuz.';
         return NextResponse.json({ reply, source: 'gemini' }, { headers: corsHeaders });
-      } catch (err) {
-        // Safe logging in dev only, never leak API keys
-        if (process.env.NODE_ENV !== 'production') {
-          console.warn('Gemini API call failed, falling back to local engine');
-        }
+      } catch {
+        // Fallback to local rule engine if API fails
       }
     }
 
@@ -118,44 +117,37 @@ YÖNERGELERİN:
 }
 
 function generateRuleEngineResponse(game: GameData, query: string): string {
-  const q = query.toLowerCase().trim();
+  const q = query.toLowerCase();
 
-  // Check exact/close FAQ matches
-  for (const faq of game.faqs) {
-    const faqQ = faq.question.toLowerCase();
-    const words = faqQ.split(' ').filter((w: string) => w.length > 3);
-    const matchCount = words.filter((w: string) => q.includes(w)).length;
-
-    if (matchCount >= 2 || q.includes(faqQ) || faqQ.includes(q)) {
-      return `🎲 **Hakem Kararı (${faq.pageRef || 'Kural Kitapçığı'}):**\n\n${faq.answer}\n\n*Masada iyi eğlenceler! Başka bir kural anlaşmazlığı olursa sormaktan çekinmeyin.*`;
-    }
+  // 1. FAQ Exact or Keyword Match
+  const matchingFaq = game.faqs.find((f) =>
+    f.question.toLowerCase().split(' ').some((word) => word.length > 3 && q.includes(word))
+  );
+  if (matchingFaq) {
+    return `**Hakem Kararı:**\n\n${matchingFaq.answer}\n\n*(Kaynak: ${matchingFaq.pageRef || 'Resmi Kural Kitapçığı'})*`;
   }
 
-  // Setup / Kurulum queries
-  if (q.includes('kurulum') || q.includes('nasıl kurulur') || q.includes('başla') || q.includes('hazır')) {
-    let res = `📋 **${game.title} Hızlı Kurulum Adımları:**\n\n`;
-    game.setupSteps.forEach((step: SetupStep, idx: number) => {
-      res += `**${idx + 1}. ${step.title}:** ${step.description}\n`;
-      if (step.tip) res += `💡 *İpucu: ${step.tip}*\n`;
-      res += '\n';
-    });
-    return res;
+  // 2. Setup query
+  if (q.includes('kurulum') || q.includes('dizilim') || q.includes('başla') || q.includes('hazır')) {
+    const steps = game.setupSteps
+      .map((s: SetupStep, i: number) => `**${i + 1}. ${s.title}**: ${s.description}`)
+      .join('\n\n');
+    return `**${game.title} Kurulum Sırası:**\n\n${steps}`;
   }
 
-  // Turn flow / Sıra bendeyken ne yaparım
-  if (q.includes('sıra') || q.includes('tur') || q.includes('hamle') || q.includes('ne yapabilirim') || q.includes('aşama')) {
-    let res = `⏱️ **${game.title} Tur Akışı (Sıra Sizdeyken):**\n\n`;
-    game.turnPhases.forEach((tp: TurnPhase) => {
-      res += `🔹 **${tp.phase}**\n${tp.description}\n\n`;
-    });
-    return res;
+  // 3. Turn query
+  if (q.includes('sıra') || q.includes('tur') || q.includes('hamle') || q.includes('akış')) {
+    const phases = game.turnPhases
+      .map((p: TurnPhase) => `**${p.phase}**: ${p.description}`)
+      .join('\n\n');
+    return `**${game.title} Tur Akışı:**\n\n${phases}`;
   }
 
-  // How to win / Puanlama
-  if (q.includes('nasıl kazanılır') || q.includes('kazan') || q.includes('puan') || q.includes('bit')) {
-    return `🏆 **${game.title} - Kazanma Şartı:**\n\n${game.winCondition}\n\n${game.rulesKnowledge.trim()}`;
+  // 4. Win condition query
+  if (q.includes('kazan') || q.includes('puan') || q.includes('skor') || q.includes('bit')) {
+    return `**Kazanma Şartı:**\n\n${game.winCondition}`;
   }
 
-  // Fallback helpful generic answer
-  return `🎲 **${game.title} Kural Hakemi:**\n\nSorunuzla ilgili temel kural:\n${game.rulesKnowledge.trim()}\n\n💡 *Daha detaylı analiz için sorunuzu biraz daha açabilir veya yukarıdaki hazır kural haplarına dokunabilirsiniz.*`;
+  // 5. Default rules summary
+  return `**Hakem Notu (${game.title}):**\n\n${game.rulesKnowledge}\n\n*💡 Detaylı kural çelişkisi için soru sorabilir veya yukarıdaki sekmelerden Kurulum / Tur Akışı bölümlerini inceleyebilirsiniz.*`;
 }

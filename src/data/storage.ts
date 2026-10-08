@@ -3,6 +3,7 @@ import path from 'path';
 import { GAMES_DATA, GameData } from './games';
 
 const DATA_FILE = path.join(process.cwd(), 'src', 'data', 'games.json');
+const CONFIG_FILE = path.join(process.cwd(), 'src', 'data', 'config.json');
 
 export function getStoredGames(): Record<string, GameData> {
   try {
@@ -42,4 +43,33 @@ export function deleteGame(id: string): boolean {
     return true;
   }
   return false;
+}
+
+export interface AdminConfig {
+  geminiApiKey?: string;
+  adminPin?: string;
+}
+
+export function getAdminConfig(): AdminConfig {
+  try {
+    if (fs.existsSync(CONFIG_FILE)) {
+      const content = fs.readFileSync(CONFIG_FILE, 'utf-8');
+      return JSON.parse(content);
+    }
+  } catch {
+    // Handled silently
+  }
+  return {};
+}
+
+export function saveAdminConfig(config: AdminConfig): void {
+  try {
+    const dir = path.dirname(CONFIG_FILE);
+    if (!fs.existsSync(dir)) {
+      fs.mkdirSync(dir, { recursive: true });
+    }
+    fs.writeFileSync(CONFIG_FILE, JSON.stringify(config, null, 2), 'utf-8');
+  } catch {
+    // Handled silently
+  }
 }

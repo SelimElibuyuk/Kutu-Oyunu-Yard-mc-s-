@@ -2,7 +2,7 @@
   "catan": {
     "id": "catan",
     "title": "Catan",
-    "tagline": "Adanın fatihi ol, ticaret yap, yerleşimlerini büyüt!",
+    "tagline": "Adanın fatihi ol, ticaret yap, İyerleşimlerini büyüt!",
     "category": "Strateji & Ticaret",
     "players": "3-4 Kişi (Genişleme ile 5-6)",
     "minPlayers": 3,
@@ -13,7 +13,7 @@
     "accentColor": "#f59e0b",
     "bgGradient": "from-amber-500 to-orange-600",
     "badge": "Klasik",
-    "description": "Catan adasında ham maddeleri (odun, tuğla, koyun, buğday, demir) toplayıp yollar, köyler ve şehirler inşa ederek ilk 10 puana ulaşan oyuncu kazanır.",
+    "description": "Catan adasında ham maddeleri (odun, tuğla, koyun, buğday, demir) toplayıp yollar, köyler ve şŞehirler inşa ederek ilk 10 puana ulaşan oyuncu kazanır.",
     "winCondition": "Kendi sıranızda 10 Zafer Puanına (ZP) ilk ulaşan olmak.",
     "setupSteps": [
       {
@@ -27,18 +27,18 @@
       },
       {
         "title": "İlk Yerleşimler",
-        "description": "Herkes sırayla 1 köy ve 1 yol koyar. Son oyuncudan geriye doğru herkes 2. köy ve yolunu yerleştirir.",
+        "description": "Herkes sırayla 1 köy ve 1 yol koyar. Son oyuncudan geriİye doğru herkes 2. köy ve yolunu İyerleştirir.",
         "tip": "Köyler arası en az 2 yol (2 köşe) boşluk olmalıdır!"
       },
       {
         "title": "Başlangıç Kaynakları",
-        "description": "Her oyuncu yalnızca İKİNCİ kurduğu köye komşu arazilerden 1'er kaynak kartı alır."
+        "description": "Her oyuncu yalnızca İKİNCİ kurduğu köİye komşu arazilerden 1'er kaynak kartı alır."
       }
     ],
     "turnPhases": [
       {
         "phase": "1. Zar Atma (Üretim)",
-        "description": "2 zarı atın. Çıkan sayıdaki arazilerden köyü olan 1, şehri olan 2 kaynak alır. 7 gelirse hırsız devreye girer."
+        "description": "2 zarı atın. Çıkan sayıdaki arazilerden köyü olan 1, şehri olan 2 kaynak alır. 7 gelirse hırsız devreİye girer."
       },
       {
         "phase": "2. Ticaret",
@@ -52,7 +52,7 @@
     "faqs": [
       {
         "question": "Zarda 7 gelince ne olur?",
-        "answer": "Elinde 8+ kartı olanlar yarısını atar. Zarı atan hırsızı istediği yere taşır ve komşu birinden görmeden 1 kart çalar. Hırsızın olduğu yerden üretim yapılamaz.",
+        "answer": "Elinde 8+ kartı olanlar yarısını atar. Zarı atan hırsızı istediği İyere taşır ve komşu birinden görmeden 1 kart çalar. Hırsızın olduğu İyerden üretim yapılamaz.",
         "pageRef": "Syf 6"
       },
       {
@@ -72,12 +72,12 @@
       "Gelişim kartı kuralları",
       "Liman takası nasıl yapılır?"
     ],
-    "rulesKnowledge": "Catan: 10 ZP kazandırır. Köy=1p, Şehir=2p, En Uzun Yol=2p (min 5), En Büyük Ordu=2p (min 3 şövalye). Mesafe kuralı: İki bina arasında en az 2 kavşak boşluk olmalıdır."
+    "rulesKnowledge": "Catan: 10 ZP kazandırır. Köy=1p, Şehir=2p, En Uzun Yol=2p (min 5), En Büyük Ordu=2p (min 3 şövalİye). Mesafe kuralı: İki bina arasında en az 2 kavşak boşluk olmalıdır."
   },
   "carcassonne": {
     "id": "carcassonne",
     "title": "Carcassonne",
-    "tagline": "Orta Çağ şehirlerini, yollarını ve manastırlarını inşa et!",
+    "tagline": "Orta Çağ şŞehirlerini, yollarını ve manastırlarını inşa et!",
     "category": "Karo Yerleştirme",
     "players": "2-5 Kişi",
     "minPlayers": 2,
@@ -108,7 +108,7 @@
       },
       {
         "phase": "2. Piyon Koy (İsteğe Bağlı)",
-        "description": "Yeni koyduğunuz karonun üzerine piyon yerleştirin. (Aynı yapıda önceden piyon olmamalı)."
+        "description": "Yeni koyduğunuz karonun üzerine piyon İyerleştirin. (Aynı yapıda önceden piyon olmamalı)."
       },
       {
         "phase": "3. Puanlama & Piyon İadesi",
@@ -132,7 +132,7 @@
       "Aynı şehirde iki piyon olursa?",
       "Şehir puanı nasıl hesaplanır?"
     ],
-    "rulesKnowledge": "Carcassonne: Tamamlanan yol = karo başına 1p. Tamamlanan şehir = karo başına 2p + arma başına 2p. Tamamlanan manastır = 9p. Oyun sonu bitmeyen yapılar: karo başına 1p."
+    "rulesKnowledge": "Carcassonne: Tamamlanan yol = karo başına 1p. Tamamlanan şehir = karo başına 2p + arma başına 2p. Tamamlanan manastır = 9p. Oyun sonu bitmeİyen yapılar: karo başına 1p."
   },
   "secret-hitler": {
     "id": "secret-hitler",
@@ -148,8 +148,8 @@
     "accentColor": "#ef4444",
     "bgGradient": "from-red-600 to-slate-800",
     "badge": "Blöf & Çıkarım",
-    "description": "Gizli kimliklerle liberaller ve faşistler yasa çıkarmaya çalışır. Hitler kimliğini gizlerken faşistler onu şansölye yapmaya çalışır.",
-    "winCondition": "Liberaller: 5 Liberal yasa çıkarmak veya Hitler'i vurmak. Faşistler: 6 Faşist yasa çıkarmak veya 3 faşist yasa sonrası Hitler'i Şansölye seçtirmek.",
+    "description": "Gizli kimliklerle liberaller ve faşistler yasa çıkarmaya çalışır. Hitler kimliğini gizlerken faşistler onu şansölİye yapmaya çalışır.",
+    "winCondition": "Liberaller: 5 Liberal yasa çıkarmak veya Hitler'i vurmak. Faşistler: 6 Faşist yasa çıkarmak veya 3 faşist yasa sonrası Hitler'i Şansölİye seçtirmek.",
     "setupSteps": [
       {
         "title": "Gizli Kimlikler",
@@ -163,7 +163,7 @@
     "turnPhases": [
       {
         "phase": "1. Adaylık",
-        "description": "Başkan sıradaki oyuncuya geçer. Başkan bir Şansölye adayı belirler (önceki hükümet üyeleri seçilemez)."
+        "description": "Başkan sıradaki oyuncuya geçer. Başkan bir Şansölİye adayı belirler (önceki hükümet üİyeleri seçilemez)."
       },
       {
         "phase": "2. Seçim (Ja / Nein)",
@@ -171,7 +171,7 @@
       },
       {
         "phase": "3. Yasa Çıkarma",
-        "description": "Başkan desteden 3 yasa çeker, 1'ini gizlice atar. Kalan 2 yasayı Şansölye'ye verir. Şansölye 1'ini atar, 1'ini yürürlüğe sokar."
+        "description": "Başkan desteden 3 yasa çeker, 1'ini gizlice atar. Kalan 2 yasayı Şansölİye'İye verir. Şansölİye 1'ini atar, 1'ini yürürlüğe sokar."
       }
     ],
     "faqs": [
@@ -181,8 +181,8 @@
         "pageRef": "Syf 3"
       },
       {
-        "question": "Veto hakkı ne zaman devreye girer?",
-        "answer": "5. Faşist yasa çıktıktan sonra Şansölye, Başkan'ın onayıyla gelen 2 yasayı da çöpe atmayı (veto) teklif edebilir.",
+        "question": "Veto hakkı ne zaman devreİye girer?",
+        "answer": "5. Faşist yasa çıktıktan sonra Şansölİye, Başkan'ın onayıyla gelen 2 yasayı da çöpe atmayı (veto) teklif edebilir.",
         "pageRef": "Syf 7"
       }
     ],
@@ -192,11 +192,11 @@
       "Üst üste Nein çıkarsa ne olur?",
       "Önceki hükümet üyeleri seçilebilir mi?"
     ],
-    "rulesKnowledge": "Secret Hitler: 5 Liberal yasa veya Hitler'in vurulması Liberalleri kazandırır. 6 Faşist yasa veya 3. faşist yasa sonrasında Hitler'in Şansölye seçilmesi Faşistleri kazandırır."
+    "rulesKnowledge": "Secret Hitler: 5 Liberal yasa veya Hitler'in vurulması Liberalleri kazandırır. 6 Faşist yasa veya 3. faşist yasa sonrasında Hitler'in Şansölİye seçilmesi Faşistleri kazandırır."
   },
   "bang": {
     "id": "bang",
-    "title": "Bang!",
+    "title": "Bang",
     "tagline": "Vahşi Batı'da Şerif, Yardımcılar, Haydutlar ve Hain karşı karşıya!",
     "category": "Gizli Roller & Kart",
     "players": "4-7 Kişi",
@@ -208,7 +208,7 @@
     "accentColor": "#b45309",
     "bgGradient": "from-amber-700 to-yellow-800",
     "badge": "Vahşi Batı",
-    "description": "Şerif haydutları ve haini yok etmeye çalışır. Haydutlar Şerif'i öldürmek ister. Hain ise son kişi olarak Şerif'le teke tek kalıp onu devirmelidir.",
+    "description": "Şerif haydutları ve haini yok etmeİye çalışır. Haydutlar Şerif'i öldürmek ister. Hain ise son kişi olarak Şerif'le teke tek kalıp onu devirmelidir.",
     "winCondition": "Şerif & Yardımcılar: Tüm Haydut ve Haini yok etmek. Haydutlar: Şerif'i öldürmek. Hain: Son ayakta kalan kişi olmak.",
     "setupSteps": [
       {
@@ -256,7 +256,7 @@
   "7-wonders": {
     "id": "7-wonders",
     "title": "7 Wonders",
-    "tagline": "Antik dünyanın harikalarını inşa et, medeniyetini zafere taşı!",
+    "tagline": "Antik dünyanın harikalarını inşa et, medeniİyetini zafere taşı!",
     "category": "Draft & Medeniyet",
     "players": "3-7 Kişi",
     "minPlayers": 3,
@@ -286,11 +286,11 @@
       },
       {
         "phase": "2. Eylem Yap",
-        "description": "Herkes aynı anda kartını açar: Yapıyı kurar (maliyeti ödeyerek), Harika aşamasını inşa eder veya 3 altın için kartı atar."
+        "description": "Herkes aynı anda kartını açar: Yapıyı kurar (maliİyeti ödeİyerek), Harika aşamasını inşa eder veya 3 altın için kartı atar."
       },
       {
         "phase": "3. Çağ Sonu Savaşı",
-        "description": "Her çağ sonunda sağ ve sol komşunuzla askeri gücünüzü karşılaştırıp zafer/yenilgi pulu alırsınız."
+        "description": "Her çağ sonunda sağ ve sol komşunuzla askeri gücünüzü karşılaştırıp zafer/İyenilgi pulu alırsınız."
       }
     ],
     "faqs": [
@@ -315,7 +315,7 @@
   "7-wonders-duel": {
     "id": "7-wonders-duel",
     "title": "7 Wonders Duel",
-    "tagline": "İki kişilik efsanevi medeniyet düellosu!",
+    "tagline": "İki kişilik efsanevi medeniİyet düellosu!",
     "category": "2 Kişilik Strateji",
     "players": "2 Kişi",
     "minPlayers": 2,
@@ -341,7 +341,7 @@
     "turnPhases": [
       {
         "phase": "Sıranızda Açık 1 Kart Seçin:",
-        "description": "1. Kartı kur (maliyeti öde).\n2. Kartı at ve altın al (2 + sarı kart sayınız).\n3. Kendi harikanı inşa etmek için kartı harika altına sür."
+        "description": "1. Kartı kur (maliİyeti öde).\n2. Kartı at ve altın al (2 + sarı kart sayınız).\n3. Kendi harikanı inşa etmek için kartı harika altına sür."
       }
     ],
     "faqs": [
@@ -352,7 +352,7 @@
       },
       {
         "question": "Bilimsel zafer nasıl kazanılır?",
-        "answer": "Bir oyuncu 6 farklı yeşil bilim sembolünü önünde topladığı an oyun hemen biter ve o oyuncu KAZANIR.",
+        "answer": "Bir oyuncu 6 farklı İyeşil bilim sembolünü önünde topladığı an oyun hemen biter ve o oyuncu KAZANIR.",
         "pageRef": "Syf 10"
       }
     ],
@@ -378,7 +378,7 @@
     "bgGradient": "from-sky-600 to-blue-800",
     "badge": "Parti Favorisi",
     "description": "Kırmızı ve Mavi casus liderleri tek kelimelik ipuçları ve bir sayı vererek takımlarına sahadaki kendi ajan kelimelerini buldurmaya çalışır.",
-    "winCondition": "Kendi takımının tüm ajan kelimelerini rakip takımdan önce bulmak (Suikastçiye basmamak şartıyla!).",
+    "winCondition": "Kendi takımının tüm ajan kelimelerini rakip takımdan önce bulmak (Suikastçiİye basmamak şartıyla!).",
     "setupSteps": [
       {
         "title": "25 Kelime Izgarası",
@@ -386,7 +386,7 @@
       },
       {
         "title": "Anahtar Kart",
-        "description": "Sadece iki takımın lideri anahtar kartı görecek şekilde standa yerleştirin. Çerçevedeki renk ilk başlar."
+        "description": "Sadece iki takımın lideri anahtar kartı görecek şekilde standa İyerleştirin. Çerçevedeki renk ilk başlar."
       }
     ],
     "turnPhases": [
@@ -396,12 +396,12 @@
       },
       {
         "phase": "2. Tahmin Et",
-        "description": "Takım üyeleri tartışıp kelimeye dokunur. Doğruysa kart örtülür ve tahmin devam eder. Yanlışsa veya sivilse sıra geçer. Suikastçiye dokunulursa anında kaybedilir!"
+        "description": "Takım üİyeleri tartışıp kelimeİye dokunur. Doğruysa kart örtülür ve tahmin devam eder. Yanlışsa veya sivilse sıra geçer. Suikastçiİye dokunulursa anında kaybedilir!"
       }
     ],
     "faqs": [
       {
-        "question": "Suikastçiye dokunulursa ne olur?",
+        "question": "Suikastçiİye dokunulursa ne olur?",
         "answer": "Suikastçi kelimesine dokunan takım O ANDA OYUNU KAYBEDER! Karşı takım otomatik kazanır.",
         "pageRef": "Syf 4"
       },
@@ -453,7 +453,7 @@
     "faqs": [
       {
         "question": "Suikastçi kimi öldürür?",
-        "answer": "Suikastçi oyuncu ismi veremez! Sadece rol numarası veya adı söyleyebilir (Örn: 'Tüccar öldü'). Sırası gelince o rol ses çıkarmaz, turu yanar.",
+        "answer": "Suikastçi oyuncu ismi veremez! Sadece rol numarası veya adı söyleİyebilir (Örn: 'Tüccar öldü'). Sırası gelince o rol ses çıkarmaz, turu yanar.",
         "pageRef": "Syf 4"
       },
       {
@@ -472,7 +472,7 @@
   "uno": {
     "id": "uno",
     "title": "Uno",
-    "tagline": "Rengi veya sayıyı eşleştir, son karta gelince 'UNO!' diye bağır!",
+    "tagline": "Rengi veya sayıyı eşleştir, son karta gelince 'UNO!' diİye bağır!",
     "category": "Kart & Aile",
     "players": "2-10 Kişi",
     "minPlayers": 2,
@@ -518,7 +518,7 @@
   },
   "uno-flip": {
     "id": "uno-flip",
-    "title": "Uno Flip!",
+    "title": "Uno Flip",
     "tagline": "Kartların iki yüzü var: Aydınlık taraf biter, Karanlık taraf başlar!",
     "category": "Kart & Parti",
     "players": "2-10 Kişi",
@@ -541,7 +541,7 @@
     "turnPhases": [
       {
         "phase": "Flip Oynanınca:",
-        "description": "FLIP kartı atıldığı an eldeki ve yerdeki tüm kartlar tersine döner. Karanlık tarafta +5 kartı ve o renk çıkana kadar çekme cezası vardır!"
+        "description": "FLIP kartı atıldığı an eldeki ve İyerdeki tüm kartlar tersine döner. Karanlık tarafta +5 kartı ve o renk çıkana kadar çekme cezası vardır!"
       }
     ],
     "faqs": [
@@ -560,7 +560,7 @@
   },
   "uno-no-mercy": {
     "id": "uno-no-mercy",
-    "title": "Uno Show 'Em No Mercy",
+    "title": "Uno No Mercy",
     "tagline": "Acımasız Uno: +10, el değiştirme ve 25 kartla elenme!",
     "category": "Acımasız Parti",
     "players": "2-6 Kişi",
@@ -619,16 +619,16 @@
     "accentColor": "#854d0e",
     "bgGradient": "from-amber-800 to-yellow-900",
     "badge": "Mizah Klasiği",
-    "description": "Seviye 1'den başlayıp zindan kapılarını tekmeleyin, canavarlarla savaşın, diğer oyuncuların yardımı için rüşvet verin veya onları sabote edin.",
-    "winCondition": "İlk olarak 10. Seviyeye ulaşan oyuncu kazanır.",
+    "description": "Seviİye 1'den başlayıp zindan kapılarını tekmeleyin, canavarlarla savaşın, diğer oyuncuların yardımı için rüşvet verin veya onları sabote edin.",
+    "winCondition": "İlk olarak 10. Seviİyeİye ulaşan oyuncu kazanır.",
     "setupSteps": [
       {
         "title": "Kart Dağıtımı",
         "description": "Kapı ve Hazine desteleri karıştırılır. Herkese 4 Kapı ve 4 Hazine kartı verilir."
       },
       {
-        "title": "Seviye Takibi",
-        "description": "Herkes Seviye 1 İnsan olarak başlar."
+        "title": "Seviİye Takibi",
+        "description": "Herkes Seviİye 1 İnsan olarak başlar."
       }
     ],
     "turnPhases": [
@@ -642,18 +642,18 @@
       },
       {
         "phase": "3. Fazlalıkları Ver (Hayırseverlik)",
-        "description": "Elde en fazla 5 kart tutulabilir. Fazlalıklar en düşük seviyedeki oyuncuya verilir."
+        "description": "Elde en fazla 5 kart tutulabilir. Fazlalıklar en düşük seviİyedeki oyuncuya verilir."
       }
     ],
     "faqs": [
       {
-        "question": "10. Seviye nasıl kazanılır?",
-        "answer": "10. Seviye KESİNLİKLE bir canavar öldürülerek kazanılmalıdır! Seviye atlatma kartı satarak 10 olunamaz.",
+        "question": "10. Seviİye nasıl kazanılır?",
+        "answer": "10. Seviİye KESİNLİKLE bir canavar öldürülerek kazanılmalıdır! Seviİye atlatma kartı satarak 10 olunamaz.",
         "pageRef": "Syf 2"
       },
       {
         "question": "Savaşta yardım nasıl istenir?",
-        "answer": "Yalnızca 1 oyuncudan yardım isteyebilirsiniz. Yardım karşılığı çıkacak hazinelerden pay teklif edebilirsiniz.",
+        "answer": "Yalnızca 1 oyuncudan yardım isteİyebilirsiniz. Yardım karşılığı çıkacak hazinelerden pay teklif edebilirsiniz.",
         "pageRef": "Syf 4"
       }
     ],
@@ -662,7 +662,7 @@
       "Savaşta kaç kişi yardım edebilir?",
       "Kaçma kuralı nedir?"
     ],
-    "rulesKnowledge": "Munchkin: Savaş Gücünüz = Seviyeniz + Ekipman bonusları. Canavarın gücünden yüksek olmalısınız. Eşitlikte canavar kazanır (Savaşçı hariç)."
+    "rulesKnowledge": "Munchkin: Savaş Gücünüz = Seviİyeniz + Ekipman bonusları. Canavarın gücünden yüksek olmalısınız. Eşitlikte canavar kazanır (Savaşçı hariç)."
   },
   "munchkin-zombies": {
     "id": "munchkin-zombies",
@@ -678,12 +678,12 @@
     "accentColor": "#15803d",
     "bgGradient": "from-green-800 to-lime-900",
     "badge": "Zombi Temalı",
-    "description": "Zombi olarak dirilin, kurbanların kapılarını tekmeleyin, bowling topu kafanız ve kokuşmuş ayaklarınızla Seviye 10'a ulaşın.",
-    "winCondition": "İlk olarak 10. Seviyeye ulaşmak (canavar öldürerek).",
+    "description": "Zombi olarak dirilin, kurbanların kapılarını tekmeleyin, bowling topu kafanız ve kokuşmuş ayaklarınızla Seviİye 10'a ulaşın.",
+    "winCondition": "İlk olarak 10. Seviİyeİye ulaşmak (canavar öldürerek).",
     "setupSteps": [
       {
         "title": "Başlangıç",
-        "description": "4 Kapı ve 4 Hazine kartı dağıtılır. Seviye 1 Zombi olarak başlanır."
+        "description": "4 Kapı ve 4 Hazine kartı dağıtılır. Seviİye 1 Zombi olarak başlanır."
       }
     ],
     "turnPhases": [
@@ -703,11 +703,11 @@
       "Undead canavar kuralı",
       "10. Seviye şartı"
     ],
-    "rulesKnowledge": "Munchkin Zombies: Mojo (Nükleer, Vudu vs.) ve Güçler (Powers) kullanılır. Seviye kadar güç kuşanılabilir."
+    "rulesKnowledge": "Munchkin Zombies: Mojo (Nükleer, Vudu vs.) ve Güçler (Powers) kullanılır. Seviİye kadar güç kuşanılabilir."
   },
   "munchkin-cuthulu": {
     "id": "munchkin-cuthulu",
-    "title": "Munchkin Cthulhu",
+    "title": "Munchkin Cuthulu",
     "tagline": "Korkunç deliliğin kollarına atılın, antik tanrılarla savaşın!",
     "category": "Mizah & Kart",
     "players": "3-6 Kişi",
@@ -720,11 +720,11 @@
     "bgGradient": "from-teal-800 to-slate-900",
     "badge": "Cthulhu",
     "description": "Lovecraft efsaneleri ve akıl sağlığı canavarları! Kültist (Cultist) olup deliliğin gücünü kullanın veya profesör olun.",
-    "winCondition": "10. Seviyeye ulaşmak VEYA masadaki herkes Kültist olduğunda en yüksek seviyeli oyuncu olmak.",
+    "winCondition": "10. Seviİyeİye ulaşmak VEYA masadaki herkes Kültist olduğunda en yüksek seviİyeli oyuncu olmak.",
     "setupSteps": [
       {
         "title": "Başlangıç",
-        "description": "4 Kapı ve 4 Hazine kartı verilir. Seviye 1 olarak başlanır."
+        "description": "4 Kapı ve 4 Hazine kartı verilir. Seviİye 1 olarak başlanır."
       }
     ],
     "turnPhases": [
@@ -736,7 +736,7 @@
     "faqs": [
       {
         "question": "Herkes Kültist olursa ne olur?",
-        "answer": "Masadaki tüm oyuncular Kültist sınıfına geçtiğinde oyun hemen biter ve aralarından seviyesi en yüksek olan kazanır!",
+        "answer": "Masadaki tüm oyuncular Kültist sınıfına geçtiğinde oyun hemen biter ve aralarından seviİyesi en yüksek olan kazanır!",
         "pageRef": "Syf 4"
       }
     ],
@@ -765,7 +765,7 @@
     "setupSteps": [
       {
         "title": "Gelişim Kartları",
-        "description": "Seviye 1, 2 ve 3 destelerinden 4'er açık kart dizilir."
+        "description": "Seviİye 1, 2 ve 3 destelerinden 4'er açık kart dizilir."
       },
       {
         "title": "Soylular",
@@ -835,13 +835,13 @@
     ],
     "faqs": [
       {
-        "question": "Hayvan jetonu yerleştirilemezse ne olur?",
-        "answer": "Eğer aldığınız hayvan için uygun boş bir habitatınız yoksa hayvan jetonu torbaya geri atılır, sadece karoyu yerleştirirsiniz.",
+        "question": "Hayvan jetonu İyerleştirilemezse ne olur?",
+        "answer": "Eğer aldığınız hayvan için uygun boş bir habitatınız yoksa hayvan jetonu torbaya geri atılır, sadece karoyu İyerleştirirsiniz.",
         "pageRef": "Syf 3"
       },
       {
         "question": "Aşırı Nüfus (Culling) kuralı nedir?",
-        "answer": "Ortadaki 4 hayvandan 3'ü aynıysa sırası olan oyuncu 1 kez onları yenileyebilir. 4'ü de aynıysa otomatik yenilenir.",
+        "answer": "Ortadaki 4 hayvandan 3'ü aynıysa sırası olan oyuncu 1 kez onları İyenileİyebilir. 4'ü de aynıysa otomatik İyenilenir.",
         "pageRef": "Syf 4"
       }
     ],
@@ -854,7 +854,7 @@
   },
   "ticket-to-ride-europe": {
     "id": "ticket-to-ride-europe",
-    "title": "Ticket to Ride: Europe",
+    "title": "Ticket to Ride Europe",
     "tagline": "Avrupa raylarında tren rotalarını kur, biletlerini tamamla!",
     "category": "Rota & Set Toplama",
     "players": "2-5 Kişi",
@@ -866,7 +866,7 @@
     "accentColor": "#2563eb",
     "bgGradient": "from-blue-600 to-indigo-800",
     "badge": "Aile Favorisi",
-    "description": "Avrupa şehirleri arasında renkli tren vagon kartlarını toplayarak rotaları ele geçirin ve gizli görev biletlerinizi tamamlayın.",
+    "description": "Avrupa şŞehirleri arasında renkli tren vagon kartlarını toplayarak rotaları ele geçirin ve gizli görev biletlerinizi tamamlayın.",
     "winCondition": "Oyun sonunda rotalardan, tamamlanan biletlerden ve en uzun trenden en çok puanı toplamak.",
     "setupSteps": [
       {
@@ -881,7 +881,7 @@
     "turnPhases": [
       {
         "phase": "Sıranızda 4 Eylemden BİRİ:",
-        "description": "1. 2 Tren kartı çek.\n2. Rota satın al (vagonlarını yerleştir).\n3. 3 Yeni bilet çek (en az 1'ini sakla).\n4. İstasyon kur."
+        "description": "1. 2 Tren kartı çek.\n2. Rota satın al (vagonlarını İyerleştir).\n3. 3 Yeni bilet çek (en az 1'ini sakla).\n4. İstasyon kur."
       }
     ],
     "faqs": [
@@ -939,14 +939,14 @@
         "description": "Epidemic (Salgın) çıkarsa enfeksiyon oranı artar ve en alttan şehir patlar!"
       },
       {
-        "phase": "3. Şehirleri Enfekte Et",
-        "description": "Enfeksiyon oranı kadar şehir açıp yeni küpler koyun."
+        "phase": "3. ŞŞehirleri Enfekte Et",
+        "description": "Enfeksiyon oranı kadar şehir açıp İyeni küpler koyun."
       }
     ],
     "faqs": [
       {
         "question": "Salgın patlaması (Outbreak) nedir?",
-        "answer": "Bir şehirde zaten 3 küp varken 4. küp konması gerekirse o şehir patlar ve komşu TÜM şehirlere 1'er küp yayılır. 8 salgın patlaması olursa oyun kaybedilir!",
+        "answer": "Bir şehirde zaten 3 küp varken 4. küp konması gerekirse o şehir patlar ve komşu TÜM şŞehirlere 1'er küp yayılır. 8 salgın patlaması olursa oyun kaybedilir!",
         "pageRef": "Syf 7"
       },
       {
@@ -960,7 +960,7 @@
       "Tedavi nasıl bulunur?",
       "Oyunu kaybetme şartları"
     ],
-    "rulesKnowledge": "Pandemic: Tedavi bulmak için araştırma istasyonunda aynı renkten 5 kart atılmalıdır (Bilim İnsanı için 4 kart yeterlidir)."
+    "rulesKnowledge": "Pandemic: Tedavi bulmak için araştırma istasyonunda aynı renkten 5 kart atılmalıdır (Bilim İnsanı için 4 kart İyeterlidir)."
   },
   "jenga": {
     "id": "jenga",
@@ -976,8 +976,8 @@
     "accentColor": "#d97706",
     "bgGradient": "from-amber-600 to-yellow-700",
     "badge": "El Becerisi",
-    "description": "54 tahta bloktan kurulan kulede tek elle blok çekip en üste yerleştirin. Kuleyi yıkan elenir!",
-    "winCondition": "Kuleyi devirmeden son bloğu başarıyla yerleştiren oyuncu kazanır.",
+    "description": "54 tahta bloktan kurulan kulede tek elle blok çekip en üste İyerleştirin. Kuleyi yıkan elenir!",
+    "winCondition": "Kuleyi devirmeden son bloğu başarıyla İyerleştiren oyuncu kazanır.",
     "setupSteps": [
       {
         "title": "Kuleyi Kurun",
@@ -987,7 +987,7 @@
     "turnPhases": [
       {
         "phase": "Hamle",
-        "description": "Sadece TEK EL kullanarak en üst katın altından 1 blok çekin ve en üste yerleştirin."
+        "description": "Sadece TEK EL kullanarak en üst katın altından 1 blok çekin ve en üste İyerleştirin."
       }
     ],
     "faqs": [
@@ -1001,7 +1001,7 @@
       "İki el kullanılabilir mi?",
       "Hangi kattan blok çekilemez?"
     ],
-    "rulesKnowledge": "Jenga: En üstteki tamamlanmamış kattan blok çekilemez. Çekilen blok en üste düzgünce yerleştirilmelidir."
+    "rulesKnowledge": "Jenga: En üstteki tamamlanmamış kattan blok çekilemez. Çekilen blok en üste düzgünce İyerleştirilmelidir."
   },
   "tabu": {
     "id": "tabu",
@@ -1070,7 +1070,7 @@
     "turnPhases": [
       {
         "phase": "Hamle",
-        "description": "Tahtaya yeni bir kelime ekleyin (ilk kelime ortadaki yıldızdan geçmelidir). Puanınızı hesaplayıp elinizi 7 taşa tamamlayın."
+        "description": "Tahtaya İyeni bir kelime ekleyin (ilk kelime ortadaki yıldızdan geçmelidir). Puanınızı hesaplayıp elinizi 7 taşa tamamlayın."
       }
     ],
     "faqs": [
@@ -1089,7 +1089,7 @@
   "monopoly": {
     "id": "monopoly",
     "title": "Monopoly",
-    "tagline": "Zarları at, arsaları topla, evler ve oteller dik, rakiplerini iflas ettir!",
+    "tagline": "Zarlarıı at, arsaları topla, evler ve oteller dik, rakiplerini iflas ettir!",
     "category": "Ekonomi & Zar",
     "players": "2-6 Kişi",
     "minPlayers": 2,
@@ -1117,7 +1117,7 @@
     "faqs": [
       {
         "question": "Ücretsiz Otoparkta para birikir mi?",
-        "answer": "Resmi kurala göre HAYIR! Ücretsiz Otopark sadece dinlenme yeridir, ortada ceza parası birikmez (ev kuralı hariç).",
+        "answer": "Resmi kurala göre HAYIR! Ücretsiz Otopark sadece dinlenme İyeridir, ortada ceza parası birikmez (ev kuralı hariç).",
         "pageRef": "Syf 4"
       },
       {
@@ -1131,7 +1131,7 @@
       "3 çift atınca ne olur?",
       "Hapisten nasıl çıkılır?"
     ],
-    "rulesKnowledge": "Monopoly: Bir renk grubunun tamamına sahip olmadan ev dikilemez. Evler eşit dağıtılmalıdır. İflas eden oyuncunun varlıkları borçlu olduğu kişiye geçer."
+    "rulesKnowledge": "Monopoly: Bir renk grubunun tamamına sahip olmadan ev dikilemez. Evler eşit dağıtılmalıdır. İflas eden oyuncunun varlıkları borçlu olduğu kişiİye geçer."
   },
   "monopoly-city": {
     "id": "monopoly-city",
@@ -1147,7 +1147,7 @@
     "accentColor": "#0284c7",
     "bgGradient": "from-sky-700 to-slate-900",
     "badge": "Şehir İnşası",
-    "description": "Arsalara klasik evler yerine 3D konutlar, gökdelenler inşa edin. Rakiplerin arsalarına çöp tesisi veya kanalizasyon dikerek kiralarını sıfırlayın!",
+    "description": "Arsalara klasik evler İyerine 3D konutlar, gökdelenler inşa edin. Rakiplerin arsalarına çöp tesisi veya kanalizasyon dikerek kiralarını sıfırlayın!",
     "winCondition": "En zengin emlak kralı olmak veya rakipleri iflas ettirmek.",
     "setupSteps": [
       {
@@ -1177,7 +1177,7 @@
   "cluedo": {
     "id": "cluedo",
     "title": "Cluedo",
-    "tagline": "Tudor Malikanesi cinayeti: Katil kim, nerede ve hangi silahla?",
+    "tagline": "Tudor Malikanesi cinaİyeti: Katil kim, nerede ve hangi silahla?",
     "category": "Dedektiflik & Mantık",
     "players": "2-6 Kişi",
     "minPlayers": 2,
@@ -1188,11 +1188,11 @@
     "accentColor": "#7e22ce",
     "bgGradient": "from-purple-800 to-slate-900",
     "badge": "Dedektiflik",
-    "description": "Malikanede dolaşarak şüphelileri, odaları ve cinayet aletlerini sorgulayın, cinayet zarfındaki 3 gizli kartı mantık çıkarımıyla ilk çözen olun.",
-    "winCondition": "Cinayet zarfındaki Katil, Oda ve Silahı doğru suçlama yaparak ilk tahmin eden olmak.",
+    "description": "Malikanede dolaşarak şüphelileri, odaları ve cinaİyet aletlerini sorgulayın, cinaİyet zarfındaki 3 gizli kartı mantık çıkarımıyla ilk çözen olun.",
+    "winCondition": "Cinaİyet zarfındaki Katil, Oda ve Silahı doğru suçlama yaparak ilk tahmin eden olmak.",
     "setupSteps": [
       {
-        "title": "Cinayet Zarfı",
+        "title": "Cinaİyet Zarfı",
         "description": "Görmeden 1 Şüpheli, 1 Silah ve 1 Oda kartı gizli zarfa konur."
       },
       {
@@ -1213,7 +1213,7 @@
     "faqs": [
       {
         "question": "Yanlış suçlama (Accusation) yapan elenir mi?",
-        "answer": "EVET! Zarfı gizlice açıp tahmini yanlış çıkan oyuncu suçlama yapamaz ve kazanamaz. Sadece diğer oyunculara kart göstermeye devam eder.",
+        "answer": "EVET! Zarfı gizlice açıp tahmini yanlış çıkan oyuncu suçlama yapamaz ve kazanamaz. Sadece diğer oyunculara kart göstermeİye devam eder.",
         "pageRef": "Syf 5"
       }
     ],
@@ -1221,7 +1221,7 @@
       "Yanlış suçlama yaparsam ne olur?",
       "Gizli geçitler nasıl kullanılır?"
     ],
-    "rulesKnowledge": "Cluedo: Şüphe belirtmek için o odada bulunmak şarttır. Suçlama ise havuzda herhangi bir yerde yapılabilir."
+    "rulesKnowledge": "Cluedo: Şüphe belirtmek için o odada bulunmak şarttır. Suçlama ise havuzda herhangi bir İyerde yapılabilir."
   },
   "spyfall": {
     "id": "spyfall",
@@ -1237,7 +1237,7 @@
     "accentColor": "#0f766e",
     "bgGradient": "from-teal-700 to-slate-900",
     "badge": "Blöf",
-    "description": "Herkesin elinde aynı mekan kartı (Denizaltı, Otel, Korsan Gemisi vb.) varken Ajan'ın kartında sadece 'AJAN' yazar. Soru-cevaplarla ajan tespit edilmeye çalışılır.",
+    "description": "Herkesin elinde aynı mekan kartı (Denizaltı, Otel, Korsan Gemisi vb.) varken Ajan'ın kartında sadece 'AJAN' yazar. Soru-cevaplarla ajan tespit edilmeİye çalışılır.",
     "winCondition": "Masadakiler: Ajanı oybirliğiyle bulmak. Ajan: Nerede olunduğunu tahmin etmek veya yakalanmamak.",
     "setupSteps": [
       {
@@ -1248,13 +1248,13 @@
     "turnPhases": [
       {
         "phase": "Soru Evresi",
-        "description": "8 dakikalık süre başlar. Oyuncular birbirine mekanı açık etmeyecek kurnazca sorular sorar."
+        "description": "8 dakikalık süre başlar. Oyuncular birbirine mekanı açık etmeİyecek kurnazca sorular sorar."
       }
     ],
     "faqs": [
       {
         "question": "Ajan oyunu ne zaman durdurabilir?",
-        "answer": "Ajan istediği an 'Ben ajanım ve mekan şurası!' diyerek oyunu durdurabilir. Doğru bilirse anında kazanır!",
+        "answer": "Ajan istediği an 'Ben ajanım ve mekan şurası!' diİyerek oyunu durdurabilir. Doğru bilirse anında kazanır!",
         "pageRef": "Syf 3"
       }
     ],
@@ -1262,11 +1262,11 @@
       "Ajan oyunu ne zaman durdurabilir?",
       "Soru sorma kuralları"
     ],
-    "rulesKnowledge": "Spyfall: Soru sorulan kişi bir sonraki soruyu istediği birine sorar (ancak kendisine soru soran kişiye hemen geri soramaz)."
+    "rulesKnowledge": "Spyfall: Soru sorulan kişi bir sonraki soruyu istediği birine sorar (ancak kendisine soru soran kişiİye hemen geri soramaz)."
   },
   "direnis": {
     "id": "direnis",
-    "title": "Direniş (The Resistance)",
+    "title": "Direniş",
     "tagline": "Distopik gelecekte direnişçiler vs hükümet ajanları!",
     "category": "Sosyal Çıkarım",
     "players": "5-10 Kişi",
@@ -1278,8 +1278,8 @@
     "accentColor": "#b91c1c",
     "bgGradient": "from-red-800 to-slate-900",
     "badge": "Dedektiflik",
-    "description": "Direnişçiler 3 görevi tamamlamaya çalışırken, aralarındaki gizli casuslar görevleri sabote etmeye çalışır.",
-    "winCondition": "Direniş: 3 görevi başarmak. Casuslar: 3 görevi sabote etmek.",
+    "description": "Direnişşçiler 3 görevi tamamlamaya çalışırken, aralarındaki gizli casuslar görevleri sabote etmeİye çalışır.",
+    "winCondition": "Direnişş: 3 görevi başarmak. Casuslar: 3 görevi sabote etmek.",
     "setupSteps": [
       {
         "title": "Roller",
@@ -1298,7 +1298,7 @@
     ],
     "faqs": [
       {
-        "question": "Direnişçiler başarısızlık atabilir mi?",
+        "question": "Direnişşçiler başarısızlık atabilir mi?",
         "answer": "KESİNLİKLE HAYIR! Sadece casuslar Başarısızlık kartı atabilir.",
         "pageRef": "Syf 3"
       }
@@ -1307,95 +1307,7 @@
       "İyiler başarısızlık atabilir mi?",
       "Üst üste 5 ret çıkarsa?"
     ],
-    "rulesKnowledge": "Direniş: Oylamalarda eşitlik çıkarsa ret sayılır. 5 kez üst üste takım reddedilirse Casuslar otomatik kazanır."
-  },
-  "avalon": {
-    "id": "avalon",
-    "title": "The Resistance: Avalon",
-    "tagline": "Kral Arthur'un şövalyeleri mi, Mordred'in hainleri mi?",
-    "category": "Sosyal Çıkarım & Gizli Roller",
-    "players": "5-10 Kişi",
-    "minPlayers": 5,
-    "maxPlayers": 10,
-    "duration": "30-45 dk",
-    "age": "13+",
-    "difficulty": "Orta",
-    "accentColor": "#7c3aed",
-    "bgGradient": "from-purple-700 to-slate-900",
-    "badge": "Efsane Blöf",
-    "description": "Arthur'un sadık şövalyeleri ve Mordred'in hainleri. Merlin kötüleri bilir ama Suikastçiye yakalanırsa oyun kaybedilir!",
-    "winCondition": "İyiler: 3 görev kazanmak + Merlin'in vurulmaması. Kötüler: 3 görev sabote etmek VEYA Merlin'i vurmak.",
-    "setupSteps": [
-      {
-        "title": "Roller",
-        "description": "Merlin, Suikastçi, Percival, Morgana gibi roller dağıtılır. Gece seremonisi yapılır."
-      }
-    ],
-    "turnPhases": [
-      {
-        "phase": "Tur",
-        "description": "Takım önerisi, takım oylaması ve gizli görev kartı atma."
-      }
-    ],
-    "faqs": [
-      {
-        "question": "Suikast ne zaman yapılır?",
-        "answer": "İyiler 3 görevi kazandığında Kötülerin Suikastçisi Merlin'i tahmin ederse kötüler oyunu çalar ve kazanır!",
-        "pageRef": "Syf 5"
-      }
-    ],
-    "quickPrompts": [
-      "Merlin nasıl vurulur?",
-      "Percival kimi görür?",
-      "4. görevde neden 2 fail gerekir?"
-    ],
-    "rulesKnowledge": "Avalon: 7+ kişilik oyunlarda 4. görev için 2 başarısızlık kartı gerekir."
-  },
-  "exploding-kittens": {
-    "id": "exploding-kittens",
-    "title": "Exploding Kittens",
-    "tagline": "Patlayan kediden kaç, son ayakta kalan oyuncu ol!",
-    "category": "Parti & Rus Ruleti",
-    "players": "2-5 Kişi",
-    "minPlayers": 2,
-    "maxPlayers": 5,
-    "duration": "15-20 dk",
-    "age": "7+",
-    "difficulty": "Kolay",
-    "accentColor": "#ea580c",
-    "bgGradient": "from-orange-600 to-red-700",
-    "badge": "Hızlı & Eğlenceli",
-    "description": "Desteden kart çekmemek için elinizdeki kartları oynayın. Patlayan kediyi çeken ve etkisiz hale getiremeyen patlar!",
-    "winCondition": "Patlamadan hayatta kalan son kişi olmak.",
-    "setupSteps": [
-      {
-        "title": "Kurulum",
-        "description": "Herkes 1 Defuse ve 7 kart alır. Oyuncu sayısının 1 eksiği kadar Patlayan Kedi desteye karıştırılır."
-      }
-    ],
-    "turnPhases": [
-      {
-        "phase": "1. Kart Oyna (İsteğe Bağlı)",
-        "description": "İstediğiniz kadar kart oynayın."
-      },
-      {
-        "phase": "2. Turu Bitir (Zorunlu Çekim)",
-        "description": "Destenin en üstünden 1 kart çekin."
-      }
-    ],
-    "faqs": [
-      {
-        "question": "Defuse kullanınca kedi nereye konur?",
-        "answer": "Patlayan Kedi kartı destenin İSTEDİĞİNİZ bir yerine gizlice sokulur!",
-        "pageRef": "Syf 2"
-      }
-    ],
-    "quickPrompts": [
-      "Defuse nasıl kullanılır?",
-      "Nope kartı neyi durduramaz?",
-      "Attack gelince ne olur?"
-    ],
-    "rulesKnowledge": "Exploding Kittens: Nope kartı Patlayan Kedi ve Defuse hariç her eylemi durdurabilir."
+    "rulesKnowledge": "Direnişş: Oylamalarda eşitlik çıkarsa ret sayılır. 5 kez üst üste takım reddedilirse Casuslar otomatik kazanır."
   },
   "star-realms": {
     "id": "star-realms",
@@ -1422,7 +1334,7 @@
     "turnPhases": [
       {
         "phase": "Tur Akışı",
-        "description": "Elinizdeki 5 kartı oynayın: Ticaret puanıyla merkezden yeni gemiler alın, Savaş puanıyla rakibe saldırın. Tur sonu elinizi çöpe atıp 5 yeni kart çekin."
+        "description": "Elinizdeki 5 kartı oynayın: Ticaret puanıyla merkezden İyeni gemiler alın, Savaş puanıyla rakibe saldırın. Tur sonu elinizi çöpe atıp 5 İyeni kart çekin."
       }
     ],
     "faqs": [
@@ -1500,11 +1412,11 @@
     "bgGradient": "from-red-600 to-blue-900",
     "badge": "Süper Kahraman",
     "description": "Spider-Man, Iron Man veya Captain Marvel olarak kötü adamın hain planını (scheme) bozun ve onu alt edin.",
-    "winCondition": "Kötü adamın tüm aşamalarını yenmek.",
+    "winCondition": "Kötü adamın tüm aşamalarını İyenmek.",
     "setupSteps": [
       {
         "title": "Senaryo",
-        "description": "Kötü adam ve ana plan tahtaya yerleştirilir. Kahramanlar kimlik kartlarıyla başlar."
+        "description": "Kötü adam ve ana plan tahtaya İyerleştirilir. Kahramanlar kimlik kartlarıyla başlar."
       }
     ],
     "turnPhases": [
@@ -1520,7 +1432,7 @@
     "faqs": [
       {
         "question": "Alter-Ego formundayken kötü ne yapar?",
-        "answer": "Kötü adam size saldırmaz, bunun yerine hain planına tehdit (threat) ekler!",
+        "answer": "Kötü adam size saldırmaz, bunun İyerine hain planına tehdit (threat) ekler!",
         "pageRef": "Kural Kitapçığı"
       }
     ],
@@ -1532,7 +1444,7 @@
   },
   "lanetli-ada": {
     "id": "lanetli-ada",
-    "title": "Lanetli Ada (Forbidden Island)",
+    "title": "Lanetli Ada",
     "tagline": "Ada sular altında kalmadan 4 kutsal hazineyi kurtar!",
     "category": "Kooperatif Macera",
     "players": "2-4 Kişi",
@@ -1549,7 +1461,7 @@
     "setupSteps": [
       {
         "title": "Ada Izgarası",
-        "description": "24 karo ada haritası olarak dizilir. Su seviyesi sayacı ayarlanır."
+        "description": "24 karo ada haritası olarak dizilir. Su seviİyesi sayacı ayarlanır."
       }
     ],
     "turnPhases": [
@@ -1563,7 +1475,7 @@
       },
       {
         "phase": "3. Ada Karolarını Batır",
-        "description": "Su seviyesi kadar sel kartı açıp adayı sulara gömün."
+        "description": "Su seviİyesi kadar sel kartı açıp adayı sulara gömün."
       }
     ],
     "faqs": [
@@ -1583,7 +1495,7 @@
   "machi-koro": {
     "id": "machi-koro",
     "title": "Machi Koro",
-    "tagline": "Zarları at, işletmelerini çalıştır, mega şehrini ilk sen kur!",
+    "tagline": "Zarlarıı at, işletmelerini çalıştır, mega şehrini ilk sen kur!",
     "category": "Şehir Kurma & Zar",
     "players": "2-4 Kişi",
     "minPlayers": 2,
@@ -1609,11 +1521,11 @@
       },
       {
         "phase": "2. Gelir Topla",
-        "description": "Mavi kartlar herkesten, yeşiller sadece atandan, kırmızılar zar atandan çalar, morlar özeldir."
+        "description": "Mavi kartlar herkesten, İyeşiller sadece atandan, kırmızılar zar atandan çalar, morlar özeldir."
       },
       {
         "phase": "3. İnşa Et",
-        "description": "Pazardan 1 yeni kart satın alın."
+        "description": "Pazardan 1 İyeni kart satın alın."
       }
     ],
     "faqs": [
@@ -1655,7 +1567,7 @@
     "turnPhases": [
       {
         "phase": "Sıranızda 1 Eylem:",
-        "description": "1. Para kartı al.\n2. Bina satın al ve yerleştir.\n3. Sarayındaki binaları yeniden düzenle."
+        "description": "1. Para kartı al.\n2. Bina satın al ve İyerleştir.\n3. Sarayındaki binaları İyeniden düzenle."
       }
     ],
     "faqs": [
@@ -1674,7 +1586,7 @@
   },
   "kuzey-kasifleri": {
     "id": "kuzey-kasifleri",
-    "title": "Kuzey Kaşifleri (Raiders of the North Sea)",
+    "title": "Kuzey Kaşifleri",
     "tagline": "Mürettebatını topla, erzak hazırla, limanları ve kaleleri yağmala!",
     "category": "İşçi Yerleştirme",
     "players": "2-4 Kişi",
@@ -1712,7 +1624,7 @@
       "Valkyrie ne işe yarar?",
       "Yağma şartları nelerdir?"
     ],
-    "rulesKnowledge": "Kuzey Kaşifleri: İşçi koy-eylem yap, işçi al-eylem yap döngüsüyle oynanır. Yağma için yeterli erzak ve mürettebat gücü gerekir."
+    "rulesKnowledge": "Kuzey Kaşifleri: İşçi koy-eylem yap, işçi al-eylem yap döngüsüyle oynanır. Yağma için İyeterli erzak ve mürettebat gücü gerekir."
   },
   "wyrmspan": {
     "id": "wyrmspan",
@@ -1739,7 +1651,7 @@
     "turnPhases": [
       {
         "phase": "Sıranızda 3 Eylemden Biri:",
-        "description": "1. Mağara Kaz (yeni ejderha yeri aç).\n2. Ejderha Yuvalandır (kaynak ödeyerek kart koy).\n3. Mağarayı Keşfet (o mağaranın tüm bonuslarını zincirleme topla)."
+        "description": "1. Mağara Kaz (İyeni ejderha İyeri aç).\n2. Ejderha Yuvalandır (kaynak ödeİyerek kart koy).\n3. Mağarayı Keşfet (o mağaranın tüm bonuslarını zincirleme topla)."
       }
     ],
     "faqs": [
@@ -1758,8 +1670,8 @@
   },
   "catan-denizciler": {
     "id": "catan-denizciler",
-    "title": "Catan: Denizciler (Seafarers)",
-    "tagline": "Gemilerini suya indir, yeni adaları ve altın arazilerini keşfet!",
+    "title": "Catan Denizciler",
+    "tagline": "Gemilerini suya indir, İyeni adaları ve altın arazilerini keşfet!",
     "category": "Catan Genişlemesi",
     "players": "3-4 Kişi",
     "minPlayers": 3,
@@ -1770,24 +1682,24 @@
     "accentColor": "#0284c7",
     "bgGradient": "from-sky-600 to-blue-800",
     "badge": "Genişleme",
-    "description": "Catan denizlere açılıyor! Yol yerine gemiler inşa ederek komşu adalara ulaşın, korsan gemisini savuşturun ve altın nehirlerini işletin.",
+    "description": "Catan denizlere açılıyor! Yol İyerine gemiler inşa ederek komşu adalara ulaşın, korsan gemisini savuşturun ve altın nŞehirlerini işletin.",
     "winCondition": "Senaryoya göre 12 veya 13 Zafer Puanına ilk ulaşan olmak.",
     "setupSteps": [
       {
         "title": "Senaryo Haritası",
-        "description": "Seçilen senaryoya göre adalar ve deniz hekzagonları dizilir. Korsan piyonu yerleştirilir."
+        "description": "Seçilen senaryoya göre adalar ve deniz hekzagonları dizilir. Korsan piyonu İyerleştirilir."
       }
     ],
     "turnPhases": [
       {
         "phase": "Gemi İnşası",
-        "description": "1 Odun ve 1 Koyun ödeyerek gemi inşa edin. Gemiler deniz kenarlarında yol gibi uzanır."
+        "description": "1 Odun ve 1 Koyun ödeİyerek gemi inşa edin. Gemiler deniz kenarlarında yol gibi uzanır."
       }
     ],
     "faqs": [
       {
         "question": "Açık gemi hattı hareket ettirilebilir mi?",
-        "answer": "EVET! Ucunda köy veya şehir bulunmayan açık bir deniz hattının en sonundaki gemisi turunuzda sökülüp başka bir yere taşınabilir.",
+        "answer": "EVET! Ucunda köy veya şehir bulunmayan açık bir deniz hattının en sonundaki gemisi turunuzda sökülüp başka bir İyere taşınabilir.",
         "pageRef": "Syf 5"
       }
     ],
@@ -1800,8 +1712,8 @@
   },
   "catan-sovalyeler": {
     "id": "catan-sovalyeler",
-    "title": "Catan: Şehirler ve Şövalyeler",
-    "tagline": "Barbarlar yaklaşıyor! Şövalyelerini eğit, metropoller inşa et!",
+    "title": "Catan Şövalyeler ve Şehirler",
+    "tagline": "Barbarlar yaklaşıyor! ŞöŞövalİyelerini eğit, metropoller inşa et!",
     "category": "Catan İleri Düzey",
     "players": "3-4 Kişi",
     "minPlayers": 3,
@@ -1812,7 +1724,7 @@
     "accentColor": "#7c2d12",
     "bgGradient": "from-amber-900 to-red-950",
     "badge": "Stratejik Genişleme",
-    "description": "Catan'ın en derin genişlemesi! 3 yeni ticaret malı (kumaş, sikke, kağıt), şövalye orduları, barbar akınları ve şehir surları.",
+    "description": "Catan'ın en derin genişlemesi! 3 İyeni ticaret malı (kumaş, sikke, kağıt), şövalİye orduları, barbar akınları ve şehir surları.",
     "winCondition": "13 Zafer Puanına ilk ulaşan olmak.",
     "setupSteps": [
       {
@@ -1826,14 +1738,14 @@
         "description": "2 kırmızı/sarı zar + 1 Olay zarı atılır. Olay zarında Barbar gemisi ilerler veya gelişim kartı dağıtılır."
       },
       {
-        "phase": "2. Şövalye & Şehir Gelişimi",
-        "description": "Şövalyeleri uyandır, seviye atlat veya ticaret mallarıyla şehirlerini geliştir."
+        "phase": "2. Şövalİye & Şehir Gelişimi",
+        "description": "ŞöŞövalİyeleri uyandır, seviİye atlat veya ticaret mallarıyla şŞehirlerini geliştir."
       }
     ],
     "faqs": [
       {
         "question": "Barbarlar saldırınca ne olur?",
-        "answer": "Adadaki toplam aktif şövalye gücü adadaki toplam şehir sayısından azsa barbarlar kazanır ve en az şövalye katkısı veren oyuncunun şehri köye düşürülür!",
+        "answer": "Adadaki toplam aktif şövalİye gücü adadaki toplam şehir sayısından azsa barbarlar kazanır ve en az şövalİye katkısı veren oyuncunun şehri köİye düşürülür!",
         "pageRef": "Syf 9"
       }
     ],
@@ -1842,7 +1754,7 @@
       "Ticaret malları nasıl kazanılır?",
       "Metropol nasıl kurulur?"
     ],
-    "rulesKnowledge": "Catan Şövalyeler: Şehirlerden artık 1 kaynak + 1 ticaret malı üretilir (Örn: Orman şehri 1 Odun + 1 Kağıt verir)."
+    "rulesKnowledge": "Catan ŞöŞövalİyeler: ŞŞehirlerden artık 1 kaynak + 1 ticaret malı üretilir (Örn: Orman şehri 1 Odun + 1 Kağıt verir)."
   },
   "for-sale": {
     "id": "for-sale",
@@ -1920,7 +1832,7 @@
     "faqs": [
       {
         "question": "Yanlışlıkla toteme dokunan ne ceza alır?",
-        "answer": "Düello yokken totemi deviren veya haksız yere kapan oyuncu MASADAKİ TÜM AÇIK KARTLARI ceza olarak eline alır!",
+        "answer": "Düello yokken totemi deviren veya haksız İyere kapan oyuncu MASADAKİ TÜM AÇIK KARTLARI ceza olarak eline alır!",
         "pageRef": "Syf 3"
       }
     ],
@@ -2062,7 +1974,7 @@
       "Muhtarın rolü nedir?",
       "Gulyabani nasıl kazanır?"
     ],
-    "rulesKnowledge": "Gulyabani: Kurtadam/Mafya tarzı yerli rol oyunudur."
+    "rulesKnowledge": "Gulyabani: Kurtadam/Mafya tarzı İyerli rol oyunudur."
   },
   "cranium-dark": {
     "id": "cranium-dark",
@@ -2107,7 +2019,7 @@
   "devrim-80": {
     "id": "devrim-80",
     "title": "Devrim 80",
-    "tagline": "1980 öncesi Türkiye'sinde siyasi mücadele ve strateji!",
+    "tagline": "1980 öncesi Türkiİye'sinde siyasi mücadele ve strateji!",
     "category": "Tarih & Politik Strateji",
     "players": "2-4 Kişi",
     "minPlayers": 2,
@@ -2118,12 +2030,12 @@
     "accentColor": "#991b1b",
     "bgGradient": "from-red-900 to-neutral-900",
     "badge": "Yerli Tarih",
-    "description": "Yakın Türkiye siyasi tarihini konu alan yerli strateji oyunu. Farklı fraksiyonlar ideolojik hakimiyet ve teşkilatlanma mücadelesi verir.",
+    "description": "Yakın Türkiİye siyasi tarihini konu alan İyerli strateji oyunu. Farklı fraksiyonlar ideolojik hakimiİyet ve teşkilatlanma mücadelesi verir.",
     "winCondition": "Dönem sonunda en yüksek etki ve teşkilat puanına sahip olmak.",
     "setupSteps": [
       {
         "title": "Harita",
-        "description": "Türkiye haritası ve fraksiyon kartları hazırlanır."
+        "description": "Türkiİye haritası ve fraksiyon kartları hazırlanır."
       }
     ],
     "turnPhases": [
@@ -2134,8 +2046,8 @@
     ],
     "faqs": [
       {
-        "question": "Sıkıyönetim ne zaman devreye girer?",
-        "answer": "Şehirlerdeki gerginlik seviyesi kritik eşiği aştığında sıkıyönetim ilan edilir ve hamleler kısıtlanır.",
+        "question": "Sıkıyönetim ne zaman devreİye girer?",
+        "answer": "ŞŞehirlerdeki gerginlik seviİyesi kritik eşiği aştığında sıkıyönetim ilan edilir ve hamleler kısıtlanır.",
         "pageRef": "Syf 6"
       }
     ],
@@ -2147,7 +2059,7 @@
   },
   "epik-buyu-savaslari": {
     "id": "epik-buyu-savaslari",
-    "title": "Epik Büyü Savaşları (Epic Spell Wars 1)",
+    "title": "Epik Büyü Savaşları",
     "tagline": "3 parçalı çılgın büyüler yap, rakiplerini küle çevir!",
     "category": "Mizah & Kart Düellosu",
     "players": "2-6 Kişi",
@@ -2180,7 +2092,7 @@
     "faqs": [
       {
         "question": "Ölen büyücüler oyundan çıkar mı?",
-        "answer": "HAYIR! Ölen büyücüler 'Ölü Büyücü' kartları çekmeye başlar ve bir sonraki raunda dev avantajlarla başlar.",
+        "answer": "HAYIR! Ölen büyücüler 'Ölü Büyücü' kartları çekmeİye başlar ve bir sonraki raunda dev avantajlarla başlar.",
         "pageRef": "Syf 4"
       }
     ],
@@ -2193,7 +2105,7 @@
   "epik-buyu-savaslari-2": {
     "id": "epik-buyu-savaslari-2",
     "title": "Epik Büyü Savaşları 2",
-    "tagline": "Daha çok kan, daha çok tentacles ve yeni kan büyüsü mekaniği!",
+    "tagline": "Daha çok kan, daha çok tentacles ve İyeni kan büyüsü mekaniği!",
     "category": "Mizah & Kart Düellosu",
     "players": "2-6 Kişi",
     "minPlayers": 2,
@@ -2256,7 +2168,7 @@
     "turnPhases": [
       {
         "phase": "Hamle",
-        "description": "Tahtaya matematiksel olarak geçerli denklemler yerleştirin."
+        "description": "Tahtaya matematiksel olarak geçerli denklemler İyerleştirin."
       }
     ],
     "faqs": [
@@ -2273,7 +2185,7 @@
   },
   "noir": {
     "id": "noir",
-    "title": "Noir: Deductive Mystery Game",
+    "title": "Noir",
     "tagline": "Katil kimliğini gizliyor, Dedektif adım adım iz sürüyor!",
     "category": "2 Kişilik Mantık & Suç",
     "players": "2 Kişi (Varyantla çoklu)",
@@ -2285,8 +2197,8 @@
     "accentColor": "#334155",
     "bgGradient": "from-slate-800 to-black",
     "badge": "Dedektif Düellosu",
-    "description": "5x5 portre ızgarasında Dedektif ve Katil gizlice birer şüpheliye bürünür. Katil cinayet işlerken, Dedektif sorgulamalarla şüpheli çemberini daraltır.",
-    "winCondition": "Dedektif: Katili suçlayıp yakalamak. Katil: Dedektifi öldürmek veya belirli sayıda cinayet işlemek.",
+    "description": "5x5 portre ızgarasında Dedektif ve Katil gizlice birer şüpheliİye bürünür. Katil cinaİyet işlerken, Dedektif sorgulamalarla şüpheli çemberini daraltır.",
+    "winCondition": "Dedektif: Katili suçlayıp yakalamak. Katil: Dedektifi öldürmek veya belirli sayıda cinaİyet işlemek.",
     "setupSteps": [
       {
         "title": "5x5 Şüpheli Tablosu",
@@ -2378,7 +2290,7 @@
     "turnPhases": [
       {
         "phase": "Hamle",
-        "description": "Sırayla 1 patika taşı yerleştirin."
+        "description": "Sırayla 1 patika taşı İyerleştirin."
       }
     ],
     "faqs": [
@@ -2424,7 +2336,7 @@
     "faqs": [
       {
         "question": "Ahır ne işe yarar?",
-        "answer": "Ahır yapılan domuzu yağmur kartları temizleyemez!",
+        "answer": "Ahır yapılan domuzu yağmur kartları temizleİyemez!",
         "pageRef": "Syf 2"
       }
     ],
@@ -2436,8 +2348,8 @@
   },
   "story-cubes": {
     "id": "story-cubes",
-    "title": "Story Cubes (Hikaye Zarları)",
-    "tagline": "9 zar, 54 görsel, sonsuz hikaye!",
+    "title": "Story Cubes",
+    "tagline": "9 zar, 54 görsel, sonsuz hikaİye!",
     "category": "Yaratıcılık & Doğaçlama",
     "players": "1-12+ Kişi",
     "minPlayers": 1,
@@ -2448,18 +2360,18 @@
     "accentColor": "#f59e0b",
     "bgGradient": "from-amber-500 to-orange-600",
     "badge": "Yaratıcı Doğaçlama",
-    "description": "9 zarı atın, 'Bir varmış bir yokmuş...' diyerek zarlarda çıkan görselleri birbiriyle bağlayıp büyüleyici bir hikaye anlatın.",
-    "winCondition": "Rekabet yok! En yaratıcı ve eğlenceli hikayeyi ortaya çıkarmak.",
+    "description": "9 zarı atın, 'Bir varmış bir yokmuş...' diİyerek zarlarda çıkan görselleri birbiriyle bağlayıp büyüleyici bir hikaİye anlatın.",
+    "winCondition": "Rekabet yok! En yaratıcı ve eğlenceli hikaİyeyi ortaya çıkarmak.",
     "setupSteps": [
       {
-        "title": "Zarlar",
-        "description": "9 hikaye zarı hazır edilir."
+        "title": "Zarları",
+        "description": "9 hikaİye zarı hazır edilir."
       }
     ],
     "turnPhases": [
       {
         "phase": "Anlatım",
-        "description": "Zarları atın ve sırayla veya tek kişi olarak hikayenizi örün."
+        "description": "Zarlarıı atın ve sırayla veya tek kişi olarak hikaİyenizi örün."
       }
     ],
     "faqs": [
@@ -2472,7 +2384,7 @@
       "Hikaye nasıl başlatılır?",
       "Zarlar nasıl gruplanır?"
     ],
-    "rulesKnowledge": "Story Cubes: Zarlar 3'erli (Giriş, Gelişme, Sonuç) gruplanarak da oynanabilir."
+    "rulesKnowledge": "Story Cubes: Zarları 3'erli (Giriş, Gelişme, Sonuç) gruplanarak da oynanabilir."
   },
   "tombala": {
     "id": "tombala",
@@ -2528,23 +2440,23 @@
     "accentColor": "#e11d48",
     "bgGradient": "from-rose-600 to-sky-600",
     "badge": "Denge Klasiği",
-    "description": "Daireli yer matında hakemin çevirdiği çarka göre ellerinizi ve ayaklarınızı renklere koyun, dengesini kaybedip devrilen elenir!",
+    "description": "Daireli İyer matında hakemin çevirdiği çarka göre ellerinizi ve ayaklarınızı renklere koyun, dengesini kaybedip devrilen elenir!",
     "winCondition": "Mat üzerinde devrilmeden ayakta kalan son kişi olmak.",
     "setupSteps": [
       {
         "title": "Mat",
-        "description": "Twister matı yere serilir. Hakem çarkı alır."
+        "description": "Twister matı İyere serilir. Hakem çarkı alır."
       }
     ],
     "turnPhases": [
       {
         "phase": "Çark Çevir",
-        "description": "Hakem çarkı çevirir (Örn: 'Sol el mavi'). Herkes o uzvunu boş bir mavi daireye koyar."
+        "description": "Hakem çarkı çevirir (Örn: 'Sol el mavi'). Herkes o uzvunu boş bir mavi daireİye koyar."
       }
     ],
     "faqs": [
       {
-        "question": "Diz veya dirsek yere değerse ne olur?",
+        "question": "Diz veya dirsek İyere değerse ne olur?",
         "answer": "Dizi veya dirseği mata değen ya da dengesini kaybedip devrilen oyuncu ANINDA ELENİR!",
         "pageRef": "Kural Kitapçığı"
       }
@@ -2553,11 +2465,11 @@
       "Diz değerse elenir mi?",
       "İki kişi aynı daireye basabilir mi?"
     ],
-    "rulesKnowledge": "Twister: Bir daireye sadece bir kişinin eli/ayağı sığabilir. Hakemin kararı kesindir."
+    "rulesKnowledge": "Twister: Bir daireİye sadece bir kişinin eli/ayağı sığabilir. Hakemin kararı kesindir."
   },
   "what-do-you-meme": {
     "id": "what-do-you-meme",
-    "title": "What Do You Meme?",
+    "title": "What Do You Meme",
     "tagline": "İnternetin en komik görsellerine en komik altyazıyı yapıştır!",
     "category": "Mizah & Yetişkin Parti",
     "players": "3-20+ Kişi",
@@ -2613,7 +2525,7 @@
     "accentColor": "#831843",
     "bgGradient": "from-pink-900 to-slate-950",
     "badge": "Saray Blöfü",
-    "description": "Saray entrikaları, casuslar ve sahte dostluklar. Rolünüzü gizleyerek rakiplerinizi zindana attırın.",
+    "description": "Saray entrikaları, casuslar ve sahte dostluklar. Rolünüzü gizleİyerek rakiplerinizi zindana attırın.",
     "winCondition": "En çok altın ve taht nüfuzuna sahip olmak.",
     "setupSteps": [
       {
@@ -2630,7 +2542,7 @@
     "faqs": [
       {
         "question": "Blöf yakalanırsa ne olur?",
-        "answer": "Haksız yere iddiada bulunan oyuncu ceza jetonu kaybeder.",
+        "answer": "Haksız İyere iddiada bulunan oyuncu ceza jetonu kaybeder.",
         "pageRef": "Kural"
       }
     ],
@@ -2653,12 +2565,12 @@
     "accentColor": "#0d9488",
     "bgGradient": "from-teal-700 to-emerald-950",
     "badge": "Türk Mitolojisi",
-    "description": "Su İyesi, Orman İyesi, Ateş İyesi gibi kadim Türk koruyucu ruhlarının güçlerini çağırarak doğanın dengesini kurun.",
+    "description": "Su İİyesi, Orman İİyesi, Ateş İİyesi gibi kadim Türk koruyucu ruhlarının güçlerini çağırarak doğanın dengesini kurun.",
     "winCondition": "Ruhların dengesini sağlayarak en yüksek şamanik güce ulaşmak.",
     "setupSteps": [
       {
         "title": "Kurulum",
-        "description": "İye kartları ve element pulları masaya dizilir."
+        "description": "İİye kartları ve element pulları masaya dizilir."
       }
     ],
     "turnPhases": [
@@ -2669,14 +2581,14 @@
     ],
     "faqs": [
       {
-        "question": "İyeler ne zaman tetiklenir?",
-        "answer": "Gereken element dengesi sağlandığında İye'nin özel koruyucu gücü aktifleşir."
+        "question": "İİyeler ne zaman tetiklenir?",
+        "answer": "Gereken element dengesi sağlandığında İİye'nin özel koruyucu gücü aktifleşir."
       }
     ],
     "quickPrompts": [
       "İye güçleri nasıl açılır?"
     ],
-    "rulesKnowledge": "İye: Türk mitolojisi temalı yerli strateji oyunudur."
+    "rulesKnowledge": "İİye: Türk mitolojisi temalı İyerli strateji oyunudur."
   },
   "destek-kostek": {
     "id": "destek-kostek",
@@ -2720,7 +2632,7 @@
   "iz-pesinde-2": {
     "id": "iz-pesinde-2",
     "title": "İz Peşinde 2",
-    "tagline": "Gerçek deliller, gazete kupürleri, çözülmeyi bekleyen esrarengiz cinayet!",
+    "tagline": "Gerçek deliller, gazete kupürleri, çözülmeyi bekleİyen esrarengiz cinaİyet!",
     "category": "Dedektiflik Dosyası",
     "players": "1-6 Kişi",
     "minPlayers": 1,
@@ -2731,7 +2643,7 @@
     "accentColor": "#475569",
     "bgGradient": "from-slate-700 to-neutral-900",
     "badge": "Cinayet Dosyası",
-    "description": "Masaya saçılan gerçek adli tıp raporları, şüpheli sorguları ve fotoğraflarla gizemli cinayeti çözün.",
+    "description": "Masaya saçılan gerçek adli tıp raporları, şüpheli sorguları ve fotoğraflarla gizemli cinaİyeti çözün.",
     "winCondition": "Dosyadaki soruların tamamına doğru yanıt verip katili açığa çıkarmak.",
     "setupSteps": [
       {
@@ -2760,7 +2672,7 @@
   "iz-pesinde-3": {
     "id": "iz-pesinde-3",
     "title": "İz Peşinde 3",
-    "tagline": "Karanlık sırlar, yeni şüpheliler ve soğuk bir vaka!",
+    "tagline": "Karanlık sırlar, İyeni şüpheliler ve soğuk bir vaka!",
     "category": "Dedektiflik Dosyası",
     "players": "1-6 Kişi",
     "minPlayers": 1,
@@ -2782,7 +2694,7 @@
     "turnPhases": [
       {
         "phase": "Analiz",
-        "description": "Olay yeri inceleme raporları ve zaman çizelgesini karşılaştırın."
+        "description": "Olay İyeri inceleme raporları ve zaman çizelgesini karşılaştırın."
       }
     ],
     "faqs": [
@@ -2794,12 +2706,12 @@
     "quickPrompts": [
       "Zaman çizelgesi analizi"
     ],
-    "rulesKnowledge": "İz Peşinde 3: Tamamen bağımsız yeni bir cinayet dosyasıdır."
+    "rulesKnowledge": "İz Peşinde 3: Tamamen bağımsız İyeni bir cinaİyet dosyasıdır."
   },
   "kayip-diyarlar": {
     "id": "kayip-diyarlar",
     "title": "Kayıp Diyarlar",
-    "tagline": "Bilinmeyen kıtaları keşfet, kadim hazineleri ortaya çıkar!",
+    "tagline": "Bilinmeİyen kıtaları keşfet, kadim hazineleri ortaya çıkar!",
     "category": "Macera & Keşif",
     "players": "2-4 Kişi",
     "minPlayers": 2,
@@ -2815,13 +2727,13 @@
     "setupSteps": [
       {
         "title": "Keşif Haritası",
-        "description": "Karolar kapalı şekilde sisli bölgelere yerleştirilir."
+        "description": "Karolar kapalı şekilde sisli bölgelere İyerleştirilir."
       }
     ],
     "turnPhases": [
       {
         "phase": "Keşif",
-        "description": "Hareket et, yeni karo aç, eser topla."
+        "description": "Hareket et, İyeni karo aç, eser topla."
       }
     ],
     "faqs": [
@@ -2837,7 +2749,7 @@
   },
   "manyfold": {
     "id": "manyfold",
-    "title": "Manyfold (Katla Katla)",
+    "title": "Manyfold",
     "tagline": "Bezi katla, görevdeki canlıları tek yüze sığdır!",
     "category": "Hızlı Zeka & Bulmaca",
     "players": "1-4 Kişi",
@@ -2866,7 +2778,7 @@
     "faqs": [
       {
         "question": "Fazla hayvan görünürse ne olur?",
-        "answer": "Kartta istenmeyen herhangi bir fazlalık görünüyorsa katlama geçersiz sayılır!",
+        "answer": "Kartta istenmeİyen herhangi bir fazlalık görünüyorsa katlama geçersiz sayılır!",
         "pageRef": "Syf 2"
       }
     ],
