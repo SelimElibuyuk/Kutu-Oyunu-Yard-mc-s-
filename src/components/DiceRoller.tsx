@@ -154,7 +154,7 @@ export const DiceRoller: React.FC<DiceRollerProps> = ({ isOpen, onClose, game })
         </div>
 
         {/* Catan Exclusive Alert: 7 Rolled */}
-        {isCatan && total === 7 && (
+        {isCatan && !isRolling && total === 7 && (
           <div className="w-full mb-4 bg-rose-100 border-2 border-slate-900 rounded-xl p-3 text-rose-950 shadow-[3px_3px_0px_0px_#0f172a] text-center animate-bounce">
             <div className="font-display font-black text-xs text-rose-900 flex items-center justify-center gap-1">
               🚨 7 GELDİ! HIRSIZ DEVREDE!
@@ -166,7 +166,7 @@ export const DiceRoller: React.FC<DiceRollerProps> = ({ isOpen, onClose, game })
         )}
 
         {/* Monopoly Exclusive Alert: Doubles Rolled */}
-        {isMonopoly && diceCount === 2 && isDouble && (
+        {isMonopoly && !isRolling && diceCount === 2 && isDouble && (
           <div className="w-full mb-4 bg-sky-100 border-2 border-slate-900 rounded-xl p-2.5 text-sky-950 shadow-[2px_2px_0px_0px_#0f172a] text-center">
             <div className="font-display font-extrabold text-xs text-sky-900">
               🎲 ÇİFT ATTINIZ ({diceValues[0]} - {diceValues[1]})!
