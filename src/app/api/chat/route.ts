@@ -114,7 +114,7 @@ YÖNERGELERİN:
         let responseText = '';
         try {
           const response = await ai.models.generateContent({
-            model: 'gemini-3.8-flash',
+            model: 'gemini-3.5-flash-lite',
             contents,
             config: {
               systemInstruction,
@@ -122,8 +122,20 @@ YÖNERGELERİN:
           });
           responseText = response.text || '';
         } catch (geminiError: unknown) {
-          console.error('[Gemini 3.8 Flash Failed]:', geminiError);
-          // Only log the primary error. Do not attempt a deprecated model fallback.
+          console.error('[Gemini 3.5 Flash Lite Failed]:', geminiError);
+          // Try fallback to gemini-3.1-flash-lite
+          try {
+            const fallbackRes = await ai.models.generateContent({
+              model: 'gemini-3.1-flash-lite',
+              contents,
+              config: {
+                systemInstruction,
+              },
+            });
+            responseText = fallbackRes.text || '';
+          } catch (fbError) {
+            console.error('[Gemini 3.1 Flash Lite Fallback Failed]:', fbError);
+          }
         }
 
         if (responseText) {
@@ -145,7 +157,7 @@ YÖNERGELERİN:
             'Content-Type': 'application/json',
           },
           body: JSON.stringify({
-            model: 'google/gemini-3.8-flash',
+            model: 'google/gemini-3.5-flash-lite',
             messages: [
               { role: 'system', content: systemInstruction },
               ...messages.map((m: { role: string; content: string }) => ({
