@@ -191,7 +191,7 @@ export default function HomePage() {
                     </h2>
                   </div>
 
-                  <p className="text-xs font-semibold text-slate-600 mb-4 line-clamp-2 leading-relaxed">
+                  <p className="text-xs font-semibold text-slate-600 mb-4 line-clamp-3 leading-relaxed min-h-[48px]">
                     {game.tagline}
                   </p>
 
@@ -199,7 +199,7 @@ export default function HomePage() {
                   <div className="grid grid-cols-3 gap-2 py-2.5 border-y-2 border-slate-900 mb-5 text-[11px] font-bold text-slate-800">
                     <div className="flex flex-col items-center justify-center p-2 rounded-lg bg-sky-50 border border-slate-300 text-center">
                       <Users className="w-3.5 h-3.5 text-sky-600 mb-0.5" />
-                      <span className="truncate max-w-[80px]">{game.players.split(' ')[0]}</span>
+                      <span className="leading-tight text-center">{game.players}</span>
                     </div>
                     <div className="flex flex-col items-center justify-center p-2 rounded-lg bg-emerald-50 border border-slate-300 text-center">
                       <Clock className="w-3.5 h-3.5 text-emerald-600 mb-0.5" />

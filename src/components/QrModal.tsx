@@ -61,8 +61,8 @@ export const QrModal: React.FC<QrModalProps> = ({ gameId, gameTitle, isOpen, onC
           )}
         </div>
 
-        <div className="w-full bg-slate-100 border-2 border-slate-900 rounded-xl p-2.5 flex items-center justify-between text-xs text-slate-700 mb-4 font-mono shadow-[2px_2px_0px_0px_#0f172a]">
-          <span className="truncate pr-2 font-semibold text-slate-900">{fullUrl}</span>
+        <div className="w-full bg-slate-100 border-2 border-slate-900 rounded-xl p-2.5 flex items-center justify-between text-xs text-slate-700 mb-4 font-mono shadow-[2px_2px_0px_0px_#0f172a] gap-2">
+          <span className="break-all font-semibold text-slate-900 select-all">{fullUrl}</span>
           <button
             type="button"
             onClick={handleCopy}

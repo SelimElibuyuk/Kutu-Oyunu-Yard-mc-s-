@@ -28,7 +28,7 @@ import Link from 'next/link';
 interface Message {
   role: 'user' | 'assistant';
   content: string;
-  source?: 'gemini' | 'local_engine';
+  source?: 'gemini' | 'vercel_ai_gateway' | 'local_engine';
   time: string;
 }
 
@@ -338,10 +338,20 @@ export const GameClient: React.FC<GameClientProps> = ({ game }) => {
                       <span className="text-[11px] font-extrabold text-slate-600">
                         {isAssistant ? 'Kural Hakemi 🎲' : 'Siz'}
                       </span>
-                      {m.source === 'gemini' && (
-                        <span className="text-[10px] px-1.5 py-0.5 rounded bg-sky-100 border border-sky-300 text-sky-800 font-bold">
-                          Gemini AI
-                        </span>
+                      {isAssistant && (
+                        m.source === 'gemini' ? (
+                          <span className="text-[10px] px-1.5 py-0.5 rounded bg-emerald-100 border border-emerald-300 text-emerald-800 font-bold">
+                            ✨ Gemini AI
+                          </span>
+                        ) : m.source === 'vercel_ai_gateway' ? (
+                          <span className="text-[10px] px-1.5 py-0.5 rounded bg-sky-100 border border-sky-300 text-sky-800 font-bold">
+                            ▲ AI Gateway
+                          </span>
+                        ) : (
+                          <span className="text-[10px] px-1.5 py-0.5 rounded bg-amber-100 border border-amber-300 text-amber-800 font-bold">
+                            📋 Dahili Kural Motoru
+                          </span>
+                        )
                       )}
                       <span className="text-[10px] font-semibold text-slate-400">{m.time}</span>
                     </div>
@@ -521,12 +531,13 @@ export const GameClient: React.FC<GameClientProps> = ({ game }) => {
       <ScoreTracker
         isOpen={isScoreOpen}
         onClose={() => setIsScoreOpen(false)}
-        gameTitle={game.title}
+        game={game}
       />
 
       <DiceRoller
         isOpen={isDiceOpen}
         onClose={() => setIsDiceOpen(false)}
+        game={game}
       />
     </div>
   );

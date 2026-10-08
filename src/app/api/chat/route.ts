@@ -52,16 +52,7 @@ export async function POST(req: NextRequest) {
 
     const lastMessage = messages[messages.length - 1]?.content || '';
     
-    // Read from environment variable or admin server configuration
-    const adminConfig = getAdminConfig();
-    const apiKey = process.env.GEMINI_API_KEY || adminConfig.geminiApiKey;
-
-    // 2. If Gemini API Key is configured on the server, invoke Google GenAI SDK
-    if (apiKey) {
-      try {
-        const ai = new GoogleGenAI({ apiKey });
-
-        const systemInstruction = `Sen "${game.title}" kutu oyunu için özel olarak atanmış profesyonel bir Kural Hakemi ve Masa Asistanısın (Board Game Referee).
+    const systemInstruction = `Sen "${game.title}" kutu oyunu için özel olarak atanmış profesyonel bir Kural Hakemi ve Masa Asistanısın (Board Game Referee).
 Kullanıcılar oyun gecesinde masada bu oyunu oynuyorlar ve anlık takıldıkları yerleri, kural anlaşmazlıklarını ve kurulum detaylarını sana soruyorlar.
 
 KURALLAR VE BİLGİ BANKASI:
@@ -85,23 +76,108 @@ YÖNERGELERİN:
 4. Gerekirse kural referansına atıfta bulun (Örn: "Resmi Kural Kitapçığına göre...").
 5. Oyunun ruhuna uygun pozitif ve motive edici ol!`;
 
-        const contents = messages.map((m: { role: string; content: string }) => ({
-          role: m.role === 'assistant' ? 'model' : 'user',
-          parts: [{ text: String(m.content).slice(0, 1000) }],
-        }));
+    // 2. PRIMARY: Direct Google Gemini API Key
+    const adminConfig = getAdminConfig();
+    const apiKey = adminConfig.geminiApiKey || process.env.GEMINI_API_KEY;
 
-        const response = await ai.models.generateContent({
-          model: 'gemini-2.5-flash',
-          contents,
-          config: {
-            systemInstruction,
+    if (apiKey) {
+      try {
+        const ai = new GoogleGenAI({ apiKey });
+
+        // Filter and normalize messages for Gemini API:
+        // Must start with 'user' turn, no consecutive same-role turns
+        const contents: { role: 'user' | 'model'; parts: { text: string }[] }[] = [];
+        for (const m of messages) {
+          const role = m.role === 'assistant' ? 'model' : 'user';
+          if (contents.length === 0 && role === 'model') {
+            // Ignore initial assistant greeting
+            continue;
+          }
+          if (contents.length > 0 && contents[contents.length - 1].role === role) {
+            contents[contents.length - 1].parts[0].text += `\n${String(m.content).slice(0, 1000)}`;
+          } else {
+            contents.push({
+              role,
+              parts: [{ text: String(m.content).slice(0, 1000) }],
+            });
+          }
+        }
+
+        // If after filtering contents is empty, ensure at least the user's latest query is present
+        if (contents.length === 0) {
+          contents.push({
+            role: 'user',
+            parts: [{ text: String(lastMessage).slice(0, 1000) }],
+          });
+        }
+
+        let responseText = '';
+        try {
+          const response = await ai.models.generateContent({
+            model: 'gemini-3.8-flash',
+            contents,
+            config: {
+              systemInstruction,
+            },
+          });
+          responseText = response.text || '';
+        } catch {
+          // If temporary spike occurs, retry once after 500ms
+          await new Promise((r) => setTimeout(r, 600));
+          try {
+            const response = await ai.models.generateContent({
+              model: 'gemini-3.8-flash',
+              contents,
+              config: {
+                systemInstruction,
+              },
+            });
+            responseText = response.text || '';
+          } catch {
+            // Let it fall back seamlessly
+          }
+        }
+
+        if (responseText) {
+          return NextResponse.json({ reply: responseText, source: 'gemini' }, { headers: corsHeaders });
+        }
+      } catch {
+        // Fallback to gateway or local engine if Gemini SDK fails
+      }
+    }
+
+    // 3. SECONDARY: Try Vercel AI Gateway if explicitly enabled with key
+    const vercelGatewayToken = process.env.AI_GATEWAY_API_KEY;
+    if (vercelGatewayToken) {
+      try {
+        const gwRes = await fetch('https://ai-gateway.vercel.sh/v1/chat/completions', {
+          method: 'POST',
+          headers: {
+            'Authorization': `Bearer ${vercelGatewayToken}`,
+            'Content-Type': 'application/json',
           },
+          body: JSON.stringify({
+            model: 'google/gemini-2.5-flash',
+            messages: [
+              { role: 'system', content: systemInstruction },
+              ...messages.map((m: { role: string; content: string }) => ({
+                role: m.role === 'assistant' ? 'assistant' : 'user',
+                content: String(m.content).slice(0, 1000),
+              })),
+            ],
+          }),
+          signal: AbortSignal.timeout(8000),
         });
 
-        const reply = response.text || 'Kural analizi yapılamadı. Lütfen tekrar sorunuz.';
-        return NextResponse.json({ reply, source: 'gemini' }, { headers: corsHeaders });
+        if (gwRes.ok) {
+          const gwData = await gwRes.json();
+          const reply = gwData.choices?.[0]?.message?.content;
+          if (reply) {
+            return NextResponse.json({ reply, source: 'vercel_ai_gateway' }, { headers: corsHeaders });
+          }
+        }
       } catch {
-        // Fallback to local rule engine if API fails
+        // Fallback to local rule engine
       }
     }
 

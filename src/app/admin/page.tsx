@@ -50,6 +50,10 @@ export default function AdminPage() {
   const [isChangingPin, setIsChangingPin] = useState(false);
   const [pinChangeMessage, setPinChangeMessage] = useState<{ text: string; isError: boolean } | null>(null);
 
+  // API Key Testing state
+  const [isTestingKey, setIsTestingKey] = useState(false);
+  const [keyTestMessage, setKeyTestMessage] = useState<{ text: string; isError: boolean } | null>(null);
+
   // Modal State for Edit / Add
   const [editingGame, setEditingGame] = useState<GameData | null>(null);
   const [isNewGame, setIsNewGame] = useState(false);
@@ -60,7 +64,7 @@ export default function AdminPage() {
   const [formTab, setFormTab] = useState<'basic' | 'rules' | 'setup' | 'turn' | 'faq'>('basic');
 
   useEffect(() => {
-    const auth = sessionStorage.getItem('boardgame_admin_auth');
+    const auth = sessionStorage.getItem('boardgame_admin_auth') || localStorage.getItem('boardgame_admin_auth');
     if (auth === 'true') {
       setIsAuthenticated(true);
       fetchGames();
@@ -129,6 +133,28 @@ export default function AdminPage() {
     } catch {}
   };
 
+  const handleTestApiKey = async () => {
+    setIsTestingKey(true);
+    setKeyTestMessage(null);
+    try {
+      const res = await fetch('/api/admin/config', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ action: 'test_key' }),
+      });
+      const data = await res.json();
+      if (res.ok && data.success) {
+        setKeyTestMessage({ text: data.message || '✅ Gemini API bağlantısı başarılı!', isError: false });
+      } else {
+        setKeyTestMessage({ text: data.error || '❌ Test başarısız.', isError: true });
+      }
+    } catch {
+      setKeyTestMessage({ text: '❌ Sunucuya bağlanırken hata oluştu.', isError: true });
+    } finally {
+      setIsTestingKey(false);
+    }
+  };
+
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setPinError(false);
@@ -144,6 +170,8 @@ export default function AdminPage() {
       if (res.ok) {
         sessionStorage.setItem('boardgame_admin_auth', 'true');
         sessionStorage.setItem('boardgame_admin_active_pin', cleanedPin);
+        localStorage.setItem('boardgame_admin_auth', 'true');
+        localStorage.setItem('boardgame_admin_active_pin', cleanedPin);
         setIsAuthenticated(true);
         fetchGames();
         fetchApiKeyConfig();
@@ -156,6 +184,8 @@ export default function AdminPage() {
     if (cleanedPin === currentPin || cleanedPin === 'admin') {
       sessionStorage.setItem('boardgame_admin_auth', 'true');
       sessionStorage.setItem('boardgame_admin_active_pin', cleanedPin);
+      localStorage.setItem('boardgame_admin_auth', 'true');
+      localStorage.setItem('boardgame_admin_active_pin', cleanedPin);
       setIsAuthenticated(true);
       fetchGames();
       fetchApiKeyConfig();
@@ -196,6 +226,7 @@ export default function AdminPage() {
       const data = await res.json();
       if (res.ok) {
         sessionStorage.setItem('boardgame_admin_active_pin', newPinInput.trim());
+        localStorage.setItem('boardgame_admin_active_pin', newPinInput.trim());
         localStorage.setItem('boardgame_admin_pin', newPinInput.trim());
         setCurrentPinChangeInput('');
         setNewPinInput('');
@@ -215,6 +246,8 @@ export default function AdminPage() {
   const handleLogout = () => {
     sessionStorage.removeItem('boardgame_admin_auth');
     sessionStorage.removeItem('boardgame_admin_active_pin');
+    localStorage.removeItem('boardgame_admin_auth');
+    localStorage.removeItem('boardgame_admin_active_pin');
     setIsAuthenticated(false);
     setPinInput('');
   };
@@ -557,14 +590,20 @@ export default function AdminPage() {
                       <code className="bg-slate-100 border border-slate-300 px-2 py-0.5 rounded font-mono font-bold text-slate-900">
                         {apiKeyStatus.maskedKey}
                       </code>{' '}
-                      ({apiKeyStatus.source === 'env_variable' ? '.env ortamı' : 'yönetici kaydı'})
+                      ({apiKeyStatus.source === 'env_variable' ? '.env ortamı' : 'sunucuda kayıtlı'})
                     </>
                   ) : (
-                    'API anahtarı girilmediğinde sistem 61 oyunluk kural motoruyla anında çalışır.'
+                    'API anahtarı girilmediğinde sistem dahili 61 oyunluk kural motoruyla anında çalışır.'
                   )}
                 </p>
 
-                <div className="flex items-center gap-3 text-xs font-bold">
+                {apiKeyStatus.hasKey && (
+                  <div className="text-[11px] font-bold text-emerald-800 bg-emerald-50 border border-emerald-300 px-2.5 py-1.5 rounded-lg">
+                    🔒 <strong>Kalıcı Güvenlik:</strong> Anahtarınız sunucu tarafında kalıcı olarak saklanır. Panelden çıksanız dahi tüm oyun sayfalarında Gemini AI aktif kalmaya devam eder.
+                  </div>
+                )}
+
+                <div className="flex flex-wrap items-center gap-3 text-xs font-bold pt-1">
                   <a
                     href="https://aistudio.google.com/app/apikey"
                     target="_blank"
@@ -575,20 +614,48 @@ export default function AdminPage() {
                   </a>
 
                   {apiKeyStatus.hasKey && (
-                    <button
-                      type="button"
-                      onClick={handleDeleteApiKey}
-                      className="text-rose-600 hover:underline"
-                    >
-                      Anahtarı Kaldır
-                    </button>
+                    <>
+                      <button
+                        type="button"
+                        onClick={handleTestApiKey}
+                        disabled={isTestingKey}
+                        className="pixel-btn bg-emerald-200 hover:bg-emerald-300 text-slate-900 px-2.5 py-1 text-[11px] font-extrabold flex items-center gap-1 shadow-[1px_1px_0px_0px_#0f172a]"
+                      >
+                        <Sparkles className="w-3.5 h-3.5" />
+                        {isTestingKey ? 'Test Ediliyor...' : '⚡ Bağlantıyı Test Et'}
+                      </button>
+
+                      <button
+                        type="button"
+                        onClick={handleDeleteApiKey}
+                        className="text-rose-600 hover:underline text-xs"
+                      >
+                        Anahtarı Kaldır
+                      </button>
+                    </>
                   )}
                 </div>
+
+                {keyTestMessage && (
+                  <div
+                    className={`text-xs font-bold p-2.5 rounded-lg border-2 border-slate-900 shadow-[2px_2px_0px_0px_#0f172a] ${
+                      keyTestMessage.isError
+                        ? 'bg-rose-100 text-rose-900'
+                        : 'bg-emerald-100 text-emerald-900'
+                    }`}
+                  >
+                    {keyTestMessage.text}
+                  </div>
+                )}
 
                 <form onSubmit={handleSaveApiKey} className="flex flex-col sm:flex-row gap-2 pt-1">
                   <input
                     type="password"
-                    placeholder="Yeni API Key (AIzaSy...)"
+                    placeholder={
+                      apiKeyStatus.hasKey
+                        ? 'Mevcut anahtarı değiştirmek için yeni key yapıştırın...'
+                        : 'Yeni API Key (AIzaSy...)'
+                    }
                     value={newKeyInput}
                     onChange={(e) => setNewKeyInput(e.target.value)}
                     className="flex-1 min-h-[44px] bg-slate-50 border-2 border-slate-900 rounded-xl px-3 py-2 text-xs font-semibold text-slate-900 placeholder-slate-400 focus:outline-none focus:bg-white shadow-[2px_2px_0px_0px_#0f172a]"

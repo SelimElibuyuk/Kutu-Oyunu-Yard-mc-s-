@@ -80,6 +80,48 @@ export async function POST(req: NextRequest) {
       );
     }
 
+    // ACTION: TEST API KEY
+    if (body.action === 'test_key') {
+      const activeKey = config.geminiApiKey || process.env.GEMINI_API_KEY;
+      if (!activeKey) {
+        return NextResponse.json(
+          { error: 'Kayıtlı bir API anahtarı bulunamadı.' },
+          { status: 400, headers: corsHeaders }
+        );
+      }
+      try {
+        const { GoogleGenAI } = await import('@google/genai');
+        const ai = new GoogleGenAI({ apiKey: activeKey });
+        
+        let testText = '';
+        try {
+          const res = await ai.models.generateContent({
+            model: 'gemini-3.8-flash',
+            contents: [{ role: 'user', parts: [{ text: 'Sadece "Bağlantı Başarılı" de.' }] }],
+          });
+          testText = res.text || 'Bağlantı Başarılı';
+        } catch {
+          // Fallback to gemini-2.5-flash
+          const res = await ai.models.generateContent({
+            model: 'gemini-2.5-flash',
+            contents: [{ role: 'user', parts: [{ text: 'Sadece "Bağlantı Başarılı" de.' }] }],
+          });
+          testText = res.text || 'Bağlantı Başarılı';
+        }
+
+        return NextResponse.json(
+          { success: true, message: `✅ Test Başarılı! Gemini API aktif: ${testText}` },
+          { headers: corsHeaders }
+        );
+      } catch (err: unknown) {
+        const errMsg = err instanceof Error ? err.message : String(err);
+        return NextResponse.json(
+          { error: `❌ API Testi Başarısız: ${errMsg}` },
+          { status: 502, headers: corsHeaders }
+        );
+      }
+    }
+
     // ACTION: AUTH CHECK (Verify PIN on login)
     if (body.action === 'verify_pin') {
       const { pin } = body;
