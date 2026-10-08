@@ -105,20 +105,11 @@ export async function POST(req: NextRequest) {
         const ai = new GoogleGenAI({ apiKey: activeKey });
         
         let testText = '';
-        try {
-          const res = await ai.models.generateContent({
-            model: 'gemini-3.8-flash',
-            contents: [{ role: 'user', parts: [{ text: 'Sadece "Bağlantı Başarılı" de.' }] }],
-          });
-          testText = res.text || 'Bağlantı Başarılı';
-        } catch {
-          // Fallback to gemini-2.5-flash
-          const res = await ai.models.generateContent({
-            model: 'gemini-2.5-flash',
-            contents: [{ role: 'user', parts: [{ text: 'Sadece "Bağlantı Başarılı" de.' }] }],
-          });
-          testText = res.text || 'Bağlantı Başarılı';
-        }
+        const res = await ai.models.generateContent({
+          model: 'gemini-3.8-flash',
+          contents: [{ role: 'user', parts: [{ text: 'Sadece "Bağlantı Başarılı" de.' }] }],
+        });
+        testText = res.text || 'Bağlantı Başarılı';
 
         return NextResponse.json(
           { success: true, message: `✅ Test Başarılı! Gemini API aktif: ${testText}` },
