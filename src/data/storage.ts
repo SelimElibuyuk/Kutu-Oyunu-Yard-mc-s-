@@ -84,7 +84,11 @@ export function getAdminConfig(): AdminConfig {
   return config;
 }
 
-export function saveAdminConfig(config: AdminConfig): void {
+// Serverless hosts (Vercel) have a read-only filesystem: runtime writes are lost.
+export const isReadOnlyHost = Boolean(process.env.VERCEL);
+
+export function saveAdminConfig(config: AdminConfig): boolean {
+  if (isReadOnlyHost) return false;
   try {
     const dir = path.dirname(CONFIG_FILE);
     if (!fs.existsSync(dir)) {
@@ -132,7 +136,8 @@ export function saveAdminConfig(config: AdminConfig): void {
         fs.writeFileSync(ENV_FILE, envText, 'utf-8');
       }
     }
+    return true;
   } catch {
-    // Handled silently
+    return false;
   }
 }

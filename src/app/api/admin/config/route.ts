@@ -1,5 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getAdminConfig, saveAdminConfig } from '@/data/storage';
+import { getAdminConfig, saveAdminConfig, isReadOnlyHost } from '@/data/storage';
+
+const READ_ONLY_MSG =
+  'Bu sunucu (Vercel) dosyaya yazamaz; panelden yapılan değişiklik kalıcı olmaz. Anahtarı Vercel → Settings → Environment Variables → GEMINI_API_KEY üzerinden değiştirip projeyi yeniden deploy edin.';
 import { checkRateLimit } from '@/lib/rateLimit';
 import { getCorsHeaders, handleOptionsCors } from '@/lib/cors';
 
@@ -25,6 +28,7 @@ export async function GET(req: NextRequest) {
         hasKey,
         maskedKey,
         source: config.geminiApiKey ? 'admin_saved' : envKey ? 'env_variable' : 'none',
+        readOnly: isReadOnlyHost,
       },
       { headers: corsHeaders }
     );
@@ -72,7 +76,12 @@ export async function POST(req: NextRequest) {
       }
 
       config.adminPin = newPin.trim();
-      saveAdminConfig(config);
+      if (!saveAdminConfig(config)) {
+        return NextResponse.json(
+          { error: READ_ONLY_MSG },
+          { status: 409, headers: corsHeaders }
+        );
+      }
 
       return NextResponse.json(
         { success: true, message: 'Yönetici PIN kodu başarıyla güncellendi!' },
@@ -154,7 +163,12 @@ export async function POST(req: NextRequest) {
     }
 
     config.geminiApiKey = apiKey.trim();
-    saveAdminConfig(config);
+    if (!saveAdminConfig(config)) {
+      return NextResponse.json(
+        { error: READ_ONLY_MSG },
+        { status: 409, headers: corsHeaders }
+      );
+    }
 
     const maskedKey = apiKey.trim().slice(0, 6) + '••••••••' + apiKey.trim().slice(-4);
     return NextResponse.json(
@@ -187,7 +201,12 @@ export async function DELETE(req: NextRequest) {
     }
 
     delete config.geminiApiKey;
-    saveAdminConfig(config);
+    if (!saveAdminConfig(config)) {
+      return NextResponse.json(
+        { error: READ_ONLY_MSG },
+        { status: 409, headers: corsHeaders }
+      );
+    }
 
     return NextResponse.json({ success: true }, { headers: corsHeaders });
   } catch {

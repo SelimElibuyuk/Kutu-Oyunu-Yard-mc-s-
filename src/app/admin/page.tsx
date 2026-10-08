@@ -38,6 +38,7 @@ export default function AdminPage() {
     hasKey: boolean;
     maskedKey: string;
     source: string;
+    readOnly?: boolean;
   }>({ hasKey: false, maskedKey: '', source: 'none' });
   const [newKeyInput, setNewKeyInput] = useState('');
   const [isSavingKey, setIsSavingKey] = useState(false);
@@ -99,13 +100,9 @@ export default function AdminPage() {
 
       const data = await res.json();
       if (res.ok) {
-        setApiKeyStatus({
-          hasKey: true,
-          maskedKey: data.maskedKey,
-          source: 'admin_saved',
-        });
         setNewKeyInput('');
-        setKeyMessage('✅ API Anahtarı sunucuya güvenle kaydedildi!');
+        await fetchApiKeyConfig();
+        setKeyMessage('✅ API Anahtarı sunucuya kaydedildi!');
         setTimeout(() => setKeyMessage(''), 3000);
       } else {
         setKeyMessage(`❌ Hata: ${data.error || 'Kaydedilemedi'}`);
@@ -126,9 +123,12 @@ export default function AdminPage() {
         method: 'DELETE',
       });
       if (res.ok) {
-        setApiKeyStatus({ hasKey: false, maskedKey: '', source: 'none' });
+        await fetchApiKeyConfig();
         setKeyMessage('🗑️ API Anahtarı silindi. Dahili motor devrede.');
         setTimeout(() => setKeyMessage(''), 3000);
+      } else {
+        const data = await res.json().catch(() => ({}));
+        setKeyMessage(`❌ ${data.error || 'Anahtar silinemedi.'}`);
       }
     } catch {}
   };
@@ -594,7 +594,7 @@ export default function AdminPage() {
                       <code className="bg-slate-100 border border-slate-300 px-2 py-0.5 rounded font-mono font-bold text-slate-900">
                         {apiKeyStatus.maskedKey}
                       </code>{' '}
-                      ({apiKeyStatus.source === 'env_variable' ? '.env ortamı' : 'sunucuda kayıtlı'})
+                      ({apiKeyStatus.readOnly ? 'Vercel ortam değişkeninden' : apiKeyStatus.source === 'env_variable' ? '.env ortamı' : 'sunucuda kayıtlı'})
                     </>
                   ) : (
                     'API anahtarı girilmediğinde sistem dahili 61 oyunluk kural motoruyla anında çalışır.'
@@ -652,7 +652,18 @@ export default function AdminPage() {
                   </div>
                 )}
 
-                <form onSubmit={handleSaveApiKey} className="flex flex-col sm:flex-row gap-2 pt-1">
+                {apiKeyStatus.readOnly && (
+                  <div className="text-[11px] font-bold text-amber-900 bg-amber-100 border-2 border-slate-900 px-2.5 py-2 rounded-lg shadow-[2px_2px_0px_0px_#0f172a] leading-relaxed">
+                    ⚠️ <strong>Canlı sunucu (Vercel) modundasınız.</strong> Vercel dosyaya yazmaya izin vermediği için anahtar buradan kalıcı olarak kaydedilemez.
+                    Anahtarı değiştirmek için: <strong>Vercel → Projeniz → Settings → Environment Variables → GEMINI_API_KEY</strong> değerini güncelleyin, ardından <strong>Deployments → Redeploy</strong> yapın.
+                    Aşağıdaki kutuya yeni anahtarı yapıştırıp önce <strong>test edebilirsiniz</strong>.
+                  </div>
+                )}
+
+                <form
+                  onSubmit={apiKeyStatus.readOnly ? (e) => { e.preventDefault(); handleTestApiKey(); } : handleSaveApiKey}
+                  className="flex flex-col sm:flex-row gap-2 pt-1"
+                >
                   <input
                     type="password"
                     placeholder={
@@ -666,10 +677,12 @@ export default function AdminPage() {
                   />
                   <button
                     type="submit"
-                    disabled={!newKeyInput.trim() || isSavingKey}
+                    disabled={!newKeyInput.trim() || isSavingKey || isTestingKey}
                     className="pixel-btn pixel-btn-primary min-h-[44px] px-4 py-2 text-xs font-extrabold disabled:opacity-40 shrink-0"
                   >
-                    {isSavingKey ? 'Kaydediliyor...' : 'Kaydet'}
+                    {apiKeyStatus.readOnly
+                      ? (isTestingKey ? 'Test Ediliyor...' : 'Bu Anahtarı Test Et')
+                      : (isSavingKey ? 'Kaydediliyor...' : 'Kaydet')}
                   </button>
                 </form>
               </div>
