@@ -55,13 +55,13 @@ export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
     const config = getAdminConfig();
-    const validPin = config.adminPin || '1234';
+    const validPin = config.adminPin || '221105';
 
     // ACTION: CHANGE PIN
     if (body.action === 'change_pin') {
       const { currentPin, newPin } = body;
 
-      if (currentPin !== validPin && currentPin !== 'admin') {
+      if (currentPin !== validPin) {
         return NextResponse.json(
           { error: 'Mevcut PIN kodu hatalı!' },
           { status: 401, headers: corsHeaders }
@@ -136,7 +136,7 @@ export async function POST(req: NextRequest) {
     // ACTION: AUTH CHECK (Verify PIN on login)
     if (body.action === 'verify_pin') {
       const { pin } = body;
-      if (pin === validPin || pin === 'admin') {
+      if (pin === validPin) {
         return NextResponse.json({ success: true }, { headers: corsHeaders });
       }
       return NextResponse.json(
@@ -148,7 +148,7 @@ export async function POST(req: NextRequest) {
     // ACTION: SAVE GEMINI API KEY
     const { pin, apiKey } = body;
 
-    if (pin !== validPin && pin !== 'admin') {
+    if (pin !== validPin) {
       return NextResponse.json(
         { error: 'Yetkisiz erişim! Geçersiz yönetici PIN kodu.' },
         { status: 401, headers: corsHeaders }
@@ -191,9 +191,9 @@ export async function DELETE(req: NextRequest) {
     const pin = searchParams.get('pin');
 
     const config = getAdminConfig();
-    const validPin = config.adminPin || '1234';
+    const validPin = config.adminPin || '221105';
 
-    if (pin !== validPin && pin !== 'admin') {
+    if (pin !== validPin) {
       return NextResponse.json(
         { error: 'Yetkisiz erişim!' },
         { status: 401, headers: corsHeaders }

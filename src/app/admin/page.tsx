@@ -91,7 +91,7 @@ export default function AdminPage() {
     setKeyMessage('');
 
     try {
-      const activePin = sessionStorage.getItem('boardgame_admin_active_pin') || '1234';
+      const activePin = sessionStorage.getItem('boardgame_admin_active_pin') || '221105';
       const res = await fetch('/api/admin/config', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -118,7 +118,7 @@ export default function AdminPage() {
     if (!confirm('Gemini API anahtarını sunucudan kaldırmak istediğinize emin misiniz? Sistem dahili kural motoruyla çalışmaya devam edecektir.')) return;
 
     try {
-      const activePin = sessionStorage.getItem('boardgame_admin_active_pin') || '1234';
+      const activePin = sessionStorage.getItem('boardgame_admin_active_pin') || '221105';
       const res = await fetch(`/api/admin/config?pin=${encodeURIComponent(activePin)}`, {
         method: 'DELETE',
       });
@@ -183,9 +183,9 @@ export default function AdminPage() {
       }
     } catch {}
 
-    // Fallback check
-    const currentPin = localStorage.getItem('boardgame_admin_pin') || '1234';
-    if (cleanedPin === currentPin || cleanedPin === 'admin') {
+    // Offline fallback check
+    const currentPin = localStorage.getItem('boardgame_admin_pin') || '221105';
+    if (cleanedPin === currentPin) {
       sessionStorage.setItem('boardgame_admin_auth', 'true');
       sessionStorage.setItem('boardgame_admin_active_pin', cleanedPin);
       localStorage.setItem('boardgame_admin_auth', 'true');
@@ -456,7 +456,7 @@ export default function AdminPage() {
               YÖNETİCİ GİRİŞİ
             </h2>
             <p className="text-xs font-semibold text-slate-500 mb-6">
-              Etkinlik oyunlarını ve yapay zeka ayarlarını yönetmek için PIN girin. (Varsayılan PIN: 1234)
+              Etkinlik oyunlarını ve yapay zeka ayarlarını yönetmek için yönetici PIN kodunuzu girin.
             </p>
 
             <form onSubmit={handleLogin} className="space-y-4">
@@ -754,7 +754,7 @@ export default function AdminPage() {
 
                 <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pt-1">
                   <p className="text-[11px] font-semibold text-slate-500">
-                    Varsayılan başlangıç PIN kodu: <span className="font-mono font-bold text-slate-800">1234</span>
+                    PIN kodunuzu güvenli bir şekilde güncelleyebilirsiniz.
                   </p>
                   <button
                     type="submit"

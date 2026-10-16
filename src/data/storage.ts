@@ -81,6 +81,10 @@ export function getAdminConfig(): AdminConfig {
     } catch {}
   }
 
+  if (!config.adminPin) {
+    config.adminPin = process.env.ADMIN_PIN || '221105';
+  }
+
   return config;
 }
 
